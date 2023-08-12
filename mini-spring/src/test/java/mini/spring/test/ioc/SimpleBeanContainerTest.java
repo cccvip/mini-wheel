@@ -6,15 +6,23 @@
 package mini.spring.test.ioc;
 
 
+import cn.hutool.core.io.IoUtil;
+import javafx.beans.binding.BooleanExpression;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.PropertyValue;
 import mini.spring.beans.factory.bean.PropertyValues;
 import mini.spring.beans.factory.config.BeanFactory;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.factory.support.DefaultListableBeanFactory;
+import mini.spring.beans.resources.Resources;
+import mini.spring.beans.resources.impl.DefaultResourceLoader;
+import mini.spring.test.entity.Car;
 import mini.spring.test.entity.Person;
 import mini.spring.test.service.AppService;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import static org.junit.Assert.*;
 
@@ -52,7 +60,6 @@ public class SimpleBeanContainerTest {
 
     @Test
     public void testPopulateBeanWithPropertyValues() {
-
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         PropertyValues propertyValues = new PropertyValues();
         propertyValues.addPropertyValue(new PropertyValue("name", "jack"));
@@ -71,5 +78,44 @@ public class SimpleBeanContainerTest {
         assertEquals(person.getName(), "jack");
     }
 
+    @Test
+    public void testPopulateBeanWithReference() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        PropertyValues propertyValues = new PropertyValues();
+        propertyValues.addPropertyValue(new PropertyValue("name", "jack"));
+        propertyValues.addPropertyValue(new PropertyValue("age", 12));
+        propertyValues.addPropertyValue(new PropertyValue("car", new Car("bmw")));
+
+        BeanDefinition beanDefinition = new BeanDefinition(Person.class, propertyValues);
+        beanFactory.registerBeanDefinition("appService", beanDefinition);
+
+        Person person;
+        try {
+            person = (Person) beanFactory.getBean("appService");
+        } catch (BeanException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println(person.getCar().toString());
+        assertEquals(person.getName(), "jack");
+    }
+
+
+    @Test
+    public void testResourceLoader() {
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+
+        //加载classpath下的资源
+        Resources resource = resourceLoader.getResource("hello.txt");
+        InputStream inputStream = null;
+        try {
+            inputStream = resource.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert inputStream != null;
+        String content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+    }
 
 }

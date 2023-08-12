@@ -7,18 +7,21 @@ package mini.spring.test.entity;
  */
 public class Person {
 
+    private String name;
+    private Integer age;
+    private Car car;
+
     public Person() {
 
     }
 
-    public Person(String name, Integer age) {
-        this.name = name;
-        this.age = age;
+    public Car getCar() {
+        return car;
     }
 
-    private String name;
-    private Integer age;
-
+    public void setCar(Car car) {
+        this.car = car;
+    }
 
     public String getName() {
         return name;

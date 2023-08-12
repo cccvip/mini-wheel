@@ -2,6 +2,7 @@ package mini.spring.beans.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
 import mini.spring.beans.factory.bean.BeanDefinition;
+import mini.spring.beans.factory.bean.BeanReference;
 import mini.spring.beans.factory.bean.PropertyValue;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.strategy.InstantiationStrategy;
@@ -31,10 +32,15 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         return object;
     }
 
-    private void applyPropertyValues(String name, Object object, BeanDefinition beanDefinition) {
+    private void applyPropertyValues(String name, Object object, BeanDefinition beanDefinition) throws BeanException {
         for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
             String field = propertyValue.getName();
             Object value = propertyValue.getValue();
+            if (value instanceof BeanReference) {
+                // beanA依赖beanB，先实例化beanB
+                BeanReference beanReference = (BeanReference) value;
+                value = getBean(beanReference.getName());
+            }
             BeanUtil.setFieldValue(object, field, value);
         }
     }
