@@ -14,6 +14,7 @@ import mini.spring.beans.factory.bean.PropertyValues;
 import mini.spring.beans.factory.config.BeanFactory;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.factory.support.DefaultListableBeanFactory;
+import mini.spring.beans.reader.XmlBeanDefinitionReader;
 import mini.spring.beans.resources.Resources;
 import mini.spring.beans.resources.impl.DefaultResourceLoader;
 import mini.spring.test.entity.Car;
@@ -116,6 +117,28 @@ public class SimpleBeanContainerTest {
         assert inputStream != null;
         String content = IoUtil.readUtf8(inputStream);
         System.out.println(content);
+    }
+
+
+    @Test
+    public void testBeanReader() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+
+        try {
+            beanDefinitionReader.loadBeanDefinitions(resource);
+
+            Person person = (Person) beanFactory.getBean("person");
+            System.out.println(person);
+            Car car = (Car) beanFactory.getBean("car");
+            System.out.println(car);
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

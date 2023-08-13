@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.BeanReference;
 import mini.spring.beans.factory.bean.PropertyValue;
+import mini.spring.beans.factory.config.AutowireCapableBeanFactory;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.strategy.InstantiationStrategy;
 import mini.spring.beans.strategy.impl.JdkInstantiationStrategy;
@@ -13,7 +14,7 @@ import mini.spring.beans.strategy.impl.JdkInstantiationStrategy;
  * @author：carl
  * @date: 2023/8/12
  */
-public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFactory {
+public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
     InstantiationStrategy instantiationStrategy = new JdkInstantiationStrategy();
 
@@ -22,7 +23,6 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         return doCreateBean(name, beanDefinition);
     }
 
-    //使用策略模式
     Object doCreateBean(String name, BeanDefinition beanDefinition) throws BeanException {
         Object object = instantiationStrategy.instantiate(beanDefinition);
         //属性填充
