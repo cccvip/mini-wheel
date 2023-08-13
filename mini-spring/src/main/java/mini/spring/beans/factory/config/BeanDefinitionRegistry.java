@@ -15,4 +15,18 @@ public interface BeanDefinitionRegistry {
      */
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
 
+    /**
+     * 通过name获取BeanDefinition
+     * @param beanName
+     * @return
+     */
+    BeanDefinition getBeanByName(String beanName);
+
+    /**
+     * 当前Bean是否已经注册完成
+     * @param beanName
+     * @return
+     */
+    boolean containsBeanDefinition(String beanName);
+
 }
