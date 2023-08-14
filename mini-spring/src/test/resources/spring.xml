@@ -16,4 +16,9 @@
         <property name="name" value="porsche"/>
     </bean>
 
+
+    <bean class="mini.spring.test.ioc.CustomBeanFactoryPostProcessor"/>
+
+    <bean class="mini.spring.test.ioc.CutomerBeanPostProcessor"/>
+
 </beans>

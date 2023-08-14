@@ -6,6 +6,7 @@ package mini.spring.test.ioc;
 
 
 import cn.hutool.core.io.IoUtil;
+import mini.spring.beans.context.ClassPathXmlApplicationContext;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.PropertyValue;
 import mini.spring.beans.factory.bean.PropertyValues;
@@ -169,6 +170,25 @@ public class SimpleBeanContainerTest {
 
             System.out.println(person);
 
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Test
+    public void testApplicationContext() {
+
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+
+        try {
+            ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(resource);
+
+            Car car = (Car) classPathXmlApplicationContext.getBean("car");
+
+            System.out.println(car);
         } catch (BeanException e) {
             e.printStackTrace();
         }

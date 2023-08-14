@@ -33,7 +33,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     @Override
     public void refresh() throws BeanException {
         //beanFactory
-        createBeanFactory();
+        refreshBeanFactory();
 
         //
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -65,10 +65,31 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     //创建BeanFactory
-    public abstract void createBeanFactory();
+    public abstract void refreshBeanFactory() throws BeanException;
 
     //获取BeanFactory
     public abstract ConfigurableListableBeanFactory getBeanFactory();
+
+
+    @Override
+    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeanException {
+        return getBeanFactory().getBeansOfType(type);
+    }
+
+    @Override
+    public String[] getBeanDefinitionNames() {
+        return getBeanFactory().getBeanDefinitionNames();
+    }
+
+    @Override
+    public Object getBean(String beanName) throws BeanException {
+        return getBeanFactory().getBean(beanName);
+    }
+
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeanException {
+        return getBeanFactory().getBean(name, requiredType);
+    }
 
 
 }

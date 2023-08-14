@@ -14,7 +14,8 @@ import java.util.Set;
  * @author：carl
  * @date: 2023/8/12
  */
-public class DefaultListableBeanFactory extends AbstractAutoWireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
+public class DefaultListableBeanFactory extends AbstractAutoWireCapableBeanFactory
+        implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
 
     private Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
