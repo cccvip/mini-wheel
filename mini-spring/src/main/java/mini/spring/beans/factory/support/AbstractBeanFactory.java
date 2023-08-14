@@ -43,6 +43,8 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        beanPostProcessors.remove(beanPostProcessor);
+
         beanPostProcessors.add(beanPostProcessor);
     }
 
