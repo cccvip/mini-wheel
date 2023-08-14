@@ -5,6 +5,7 @@ import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.BeanReference;
 import mini.spring.beans.factory.bean.PropertyValue;
 import mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import mini.spring.beans.factory.config.BeanPostProcessor;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.strategy.InstantiationStrategy;
 import mini.spring.beans.strategy.impl.JdkInstantiationStrategy;
@@ -27,6 +28,9 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         Object object = instantiationStrategy.instantiate(beanDefinition);
         //属性填充
         applyPropertyValues(name, object, beanDefinition);
+
+        object = initializeBean(name, object);
+
         //加入缓存中
         addSingleton(name, object);
         return object;
@@ -45,4 +49,54 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         }
     }
 
+
+    private Object initializeBean(String beanName, Object bean) throws BeanException {
+
+        //前置
+        Object wrappedBean = applyBeanPostProcessorBeforeInitialization(beanName, bean);
+
+        invokeInitBean(beanName, wrappedBean);
+
+        //后置
+        wrappedBean = applyBeanPostProcessorAfterInitialization(beanName, bean);
+
+        return wrappedBean;
+    }
+
+    /**
+     * 初始化方法
+     *
+     * @param beanName
+     * @param bean
+     * @return void
+     */
+    protected void invokeInitBean(String beanName, Object bean) {
+
+    }
+
+    @Override
+    public Object applyBeanPostProcessorBeforeInitialization(String beanName, Object object) throws BeanException {
+        Object result = object;
+        for (BeanPostProcessor processor : beanPostProcessors) {
+            Object current = processor.postProcessBeforeInitialization(beanName, result);
+            if (current == null) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
+    @Override
+    public Object applyBeanPostProcessorAfterInitialization(String beanName, Object object) throws BeanException {
+        Object result = object;
+        for (BeanPostProcessor processor : beanPostProcessors) {
+            Object current = processor.postProcessAfterInitialization(beanName, result);
+            if (current == null) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
 }

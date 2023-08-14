@@ -3,7 +3,11 @@ package mini.spring.beans.factory.support;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.ConfigurableBeanFactory;
 import mini.spring.beans.factory.config.BeanFactory;
+import mini.spring.beans.factory.config.BeanPostProcessor;
 import mini.spring.beans.factory.exception.BeanException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description:
@@ -12,6 +16,8 @@ import mini.spring.beans.factory.exception.BeanException;
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
         implements ConfigurableBeanFactory {
+
+    protected List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
     public Object getBean(String key) throws BeanException {
@@ -33,6 +39,11 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeanException {
         return ((T) getBean(name));
+    }
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        beanPostProcessors.add(beanPostProcessor);
     }
 
     public abstract BeanDefinition getBeanDefinition(String name);

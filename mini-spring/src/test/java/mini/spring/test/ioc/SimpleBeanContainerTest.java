@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -7,11 +6,9 @@ package mini.spring.test.ioc;
 
 
 import cn.hutool.core.io.IoUtil;
-import javafx.beans.binding.BooleanExpression;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.PropertyValue;
 import mini.spring.beans.factory.bean.PropertyValues;
-import mini.spring.beans.factory.config.BeanFactory;
 import mini.spring.beans.factory.exception.BeanException;
 import mini.spring.beans.factory.support.DefaultListableBeanFactory;
 import mini.spring.beans.reader.XmlBeanDefinitionReader;
@@ -25,24 +22,15 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * SimpleBeanContainerTest.
  *
  * @author Carl, 2023-08-11 9:23
- * @version CrisisGo v1.0
  */
 public class SimpleBeanContainerTest {
-    //    @Test
-//    public void testGetBean() {
-//        BeanFactory beanFactory = new BeanFactory();
-//        beanFactory.registerBean("hello", new AppService());
-//        AppService appService = (AppService) beanFactory.getBean("hello");
-//        String pong = appService.ping();
-//        assertTrue("pong".equals(pong));
-//    }
-//
+
     @Test
     public void testBeanFactory() {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
@@ -137,8 +125,55 @@ public class SimpleBeanContainerTest {
         } catch (BeanException e) {
             e.printStackTrace();
         }
+    }
 
+
+    @Test
+    public void testBeanPostProcessor() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+
+        try {
+            beanDefinitionReader.loadBeanDefinitions(resource);
+
+            CutomerBeanPostProcessor cutomerBeanPostProcessor = new CutomerBeanPostProcessor();
+
+            beanFactory.addBeanPostProcessor(cutomerBeanPostProcessor);
+
+            Person person = (Person) beanFactory.getBean("person");
+
+            System.out.println(person);
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
 
     }
+
+    @Test
+    public void testBeanPostFactoryProcessor() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+
+        try {
+            beanDefinitionReader.loadBeanDefinitions(resource);
+
+            CustomBeanFactoryPostProcessor cutomerBeanPostProcessor = new CustomBeanFactoryPostProcessor();
+
+            cutomerBeanPostProcessor.postProcessBeanFactory(beanFactory);
+
+            Person person = (Person) beanFactory.getBean("person");
+
+            System.out.println(person);
+
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }
