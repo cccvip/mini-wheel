@@ -3,6 +3,7 @@ package mini.spring.beans.factory.bean;
 import mini.spring.beans.factory.config.BeanPostProcessor;
 import mini.spring.beans.factory.config.HierarchicalBeanFactory;
 import mini.spring.beans.factory.config.SingletonBeanRegistry;
+import mini.spring.beans.factory.exception.BeanException;
 
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
 
@@ -17,5 +18,5 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
     /**
      * destroyBean
      */
-    void destroyBeans();
+    void destroyBeans() throws BeanException;
 }

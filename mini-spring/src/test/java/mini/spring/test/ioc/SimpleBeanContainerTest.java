@@ -192,8 +192,20 @@ public class SimpleBeanContainerTest {
         } catch (BeanException e) {
             e.printStackTrace();
         }
-
     }
+
+    @Test
+    public void testInitMethod() {
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+        try {
+            ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(resource);
+            classPathXmlApplicationContext.registerShutdownWork();
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

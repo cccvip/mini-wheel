@@ -2,6 +2,7 @@ package mini.spring.beans.factory.support;
 
 import mini.spring.beans.factory.config.DisposableBean;
 import mini.spring.beans.factory.config.SingletonBeanRegistry;
+import mini.spring.beans.factory.exception.BeanException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +35,14 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     }
 
 
-    public void destroyBeans() {
-
-
-
+    public void destroyBeans() throws BeanException {
+        for (DisposableBean disposableBean : disposableBeanMap.values()) {
+            try {
+                disposableBean.destroy();
+            } catch (Exception e) {
+                throw new BeanException(e.getLocalizedMessage());
+            }
+        }
     }
 
 

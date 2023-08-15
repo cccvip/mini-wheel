@@ -60,7 +60,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 String id = bean.getAttribute(ID_ATTRIBUTE);
                 String name = bean.getAttribute(NAME_ATTRIBUTE);
                 String className = bean.getAttribute(CLASS_ATTRIBUTE);
-
+                String initMethod = bean.getAttribute(INIT_METHOD_ATTRIBUTE);
+                String destroyMethod = bean.getAttribute(DESTROY_METHOD_ATTRIBUTE);
                 Class<?> clazz;
                 try {
                     clazz = Class.forName(className);
@@ -74,6 +75,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                     beanName = StrUtil.lowerFirst(clazz.getSimpleName());
                 }
                 BeanDefinition beanDefinition = new BeanDefinition(clazz);
+                beanDefinition.setInitMethod(initMethod);
+                beanDefinition.setDestroyMethod(destroyMethod);
 
                 for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
                     Node node1 = bean.getChildNodes().item(j);
@@ -84,8 +87,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                             String nameAttribute = property.getAttribute(NAME_ATTRIBUTE);
                             String valueAttribute = property.getAttribute(VALUE_ATTRIBUTE);
                             String refAttribute = property.getAttribute(REF_ATTRIBUTE);
-                            String initMethod = property.getAttribute(INIT_METHOD_ATTRIBUTE);
-                            String destroyMethod = property.getAttribute(DESTROY_METHOD_ATTRIBUTE);
+
 
                             if (StrUtil.isEmpty(nameAttribute)) {
                                 throw new BeanException("The name attribute cannot be null or empty");
@@ -97,8 +99,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                             }
                             PropertyValue propertyValue = new PropertyValue(nameAttribute, value);
                             beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
-                            beanDefinition.setInitMethod(initMethod);
-                            beanDefinition.setInitMethod(destroyMethod);
                         }
                     }
                 }

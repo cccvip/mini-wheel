@@ -92,12 +92,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void registerShutdownWork() {
-        Thread shutdownHook = new Thread(() -> doClose());
+        Thread shutdownHook = new Thread(() -> {
+            try {
+                doClose();
+            } catch (BeanException e) {
+                e.printStackTrace();
+            }
+        });
         Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
-
-    private void doClose() {
+    private void doClose() throws BeanException {
         getBeanFactory().destroyBeans();
     }
 
