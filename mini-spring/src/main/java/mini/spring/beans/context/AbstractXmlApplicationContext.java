@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -15,7 +14,6 @@ import mini.spring.beans.resources.Resources;
  * AbstractXmlApplicationContext.
  *
  * @author Carl, 2023-08-14 14:10
- * @version CrisisGo v1.0
  */
 public abstract class AbstractXmlApplicationContext extends AbstractRefreshableApplicationContext {
 

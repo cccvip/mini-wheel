@@ -15,7 +15,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.InputStream;
 
-public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
+public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     //XML tag定义,主要用途用于解析生成bean
     public static final String BEAN_ELEMENT = "bean";
@@ -26,6 +26,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
     public static final String VALUE_ATTRIBUTE = "value";
     public static final String REF_ATTRIBUTE = "ref";
 
+    //新增两个属性解析
+    public static final String INIT_METHOD_ATTRIBUTE = "init-method";
+    public static final String DESTROY_METHOD_ATTRIBUTE = "destroy-method";
 
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
         super(registry);
@@ -33,13 +36,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
 
 
     @Override
-    public void loadBeanDefinitions(Resources resources) throws BeanException{
-       try {
-           InputStream inputStream = resources.getInputStream();
-           doLoadBeanDefinition(inputStream);
-       }catch (Exception e){
+    public void loadBeanDefinitions(Resources resources) throws BeanException {
+        try {
+            InputStream inputStream = resources.getInputStream();
+            doLoadBeanDefinition(inputStream);
+        } catch (Exception e) {
             throw new BeanException("");
-       }
+        }
     }
 
     private void doLoadBeanDefinition(InputStream inputStream) throws BeanException {
@@ -48,11 +51,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
         Element element = document.getDocumentElement();
         //解析根节点
         NodeList nodeList = element.getChildNodes();
-        for(int i=0;i<nodeList.getLength();i++){
+        for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            String nodeName =node.getNodeName();
-            if(BEAN_ELEMENT.equals(nodeName)){
-              Element bean = (Element)  nodeList.item(i);
+            String nodeName = node.getNodeName();
+            if (BEAN_ELEMENT.equals(nodeName)) {
+                Element bean = (Element) nodeList.item(i);
 
                 String id = bean.getAttribute(ID_ATTRIBUTE);
                 String name = bean.getAttribute(NAME_ATTRIBUTE);
@@ -81,6 +84,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
                             String nameAttribute = property.getAttribute(NAME_ATTRIBUTE);
                             String valueAttribute = property.getAttribute(VALUE_ATTRIBUTE);
                             String refAttribute = property.getAttribute(REF_ATTRIBUTE);
+                            String initMethod = property.getAttribute(INIT_METHOD_ATTRIBUTE);
+                            String destroyMethod = property.getAttribute(DESTROY_METHOD_ATTRIBUTE);
 
                             if (StrUtil.isEmpty(nameAttribute)) {
                                 throw new BeanException("The name attribute cannot be null or empty");
@@ -92,6 +97,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
                             }
                             PropertyValue propertyValue = new PropertyValue(nameAttribute, value);
                             beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                            beanDefinition.setInitMethod(initMethod);
+                            beanDefinition.setInitMethod(destroyMethod);
                         }
                     }
                 }
@@ -103,7 +110,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
                 }
 
                 //注冊為Bean
-                getBeanDefinitionRegistry().registerBeanDefinition(beanName,beanDefinition);
+                getBeanDefinitionRegistry().registerBeanDefinition(beanName, beanDefinition);
             }
 
         }

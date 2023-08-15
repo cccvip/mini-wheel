@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -18,4 +17,6 @@ public interface ConfigurableApplicationContext extends ApplicationContext {
 
     void refresh() throws BeanException;
 
+
+    void registerShutdownWork();
 }

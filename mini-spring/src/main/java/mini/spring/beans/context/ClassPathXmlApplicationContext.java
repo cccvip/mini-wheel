@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -13,7 +12,6 @@ import mini.spring.beans.resources.Resources;
  * ClassPathXmlApplicationContext.
  *
  * @author Carl, 2023-08-14 14:19
- * @version CrisisGo v1.0
  */
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 

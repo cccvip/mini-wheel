@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -13,7 +12,6 @@ import mini.spring.beans.factory.support.DefaultListableBeanFactory;
  * AbstractRefreshableApplicationContext.
  *
  * @author Carl, 2023-08-14 14:01
- * @version CrisisGo v1.0
  */
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {
 

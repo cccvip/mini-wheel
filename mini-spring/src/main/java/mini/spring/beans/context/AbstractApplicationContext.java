@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -18,7 +17,6 @@ import java.util.Map;
  * AbstractApplicationContext.
  *
  * @author Carl, 2023-08-14 11:01
- * @version CrisisGo v1.0
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
 
@@ -91,5 +89,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         return getBeanFactory().getBean(name, requiredType);
     }
 
+
+    @Override
+    public void registerShutdownWork() {
+        Thread shutdownHook = new Thread(() -> doClose());
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
+    }
+
+
+    private void doClose() {
+        getBeanFactory().destroyBeans();
+    }
 
 }

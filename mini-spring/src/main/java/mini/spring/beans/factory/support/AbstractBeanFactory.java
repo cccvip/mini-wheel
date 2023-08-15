@@ -2,7 +2,6 @@ package mini.spring.beans.factory.support;
 
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.ConfigurableBeanFactory;
-import mini.spring.beans.factory.config.BeanFactory;
 import mini.spring.beans.factory.config.BeanPostProcessor;
 import mini.spring.beans.factory.exception.BeanException;
 
