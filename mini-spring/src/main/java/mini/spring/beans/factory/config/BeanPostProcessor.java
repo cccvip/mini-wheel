@@ -5,6 +5,8 @@
 package mini.spring.beans.factory.config;
 
 
+import mini.spring.beans.factory.exception.BeanException;
+
 /**
  * BeanPostProcessor.
  *
@@ -20,7 +22,7 @@ public interface BeanPostProcessor {
      * @return java.lang.Object
      * @throw
      */
-    Object postProcessBeforeInitialization(String beanName, Object object);
+    Object postProcessBeforeInitialization(String beanName, Object object) throws BeanException;
 
     /**
      * postProcessAfterInitialization.
@@ -30,6 +32,6 @@ public interface BeanPostProcessor {
      * @return java.lang.Object
      * @throw
      */
-    Object postProcessAfterInitialization(String beanName, Object object);
+    Object postProcessAfterInitialization(String beanName, Object object) throws BeanException;
 
 }

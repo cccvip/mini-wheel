@@ -5,6 +5,7 @@
 package mini.spring.beans.context;
 
 
+import mini.spring.beans.factory.aware.ApplicationContextAwareProcessor;
 import mini.spring.beans.factory.bean.ConfigurableListableBeanFactory;
 import mini.spring.beans.factory.config.BeanFactoryPostProcessor;
 import mini.spring.beans.factory.config.BeanPostProcessor;
@@ -33,8 +34,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //beanFactory
         refreshBeanFactory();
 
-        //
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+
+        //添加全局上下文
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 
         //在bean实例化之前，执行BeanFactoryPostProcessor
         invokeBeanFactoryPostProcessors(beanFactory);

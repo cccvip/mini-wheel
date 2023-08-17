@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.sun.deploy.util.StringUtils;
+import mini.spring.beans.factory.aware.BeanFactoryAware;
 import mini.spring.beans.factory.bean.BeanDefinition;
 import mini.spring.beans.factory.bean.BeanReference;
 import mini.spring.beans.factory.bean.PropertyValue;
@@ -36,6 +37,11 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         Object object = instantiationStrategy.instantiate(beanDefinition);
         //属性填充
         applyPropertyValues(name, object, beanDefinition);
+
+        //BeanFactoryAware 实际意义不大,主要是为了BeanFactory入口
+        if (object instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) object).setBeanFactory(this);
+        }
 
         try {
             object = initializeBean(name, object, beanDefinition);

@@ -207,5 +207,19 @@ public class SimpleBeanContainerTest {
     }
 
 
+    @Test
+    public void testFactoryBean() {
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resources resource = resourceLoader.getResource("spring.xml");
+        try {
+            ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(resource);
+            Car car = applicationContext.getBean("car", Car.class);
+            System.out.println(car.toString());
+        } catch (BeanException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }
