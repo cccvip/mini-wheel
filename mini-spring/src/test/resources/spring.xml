@@ -16,7 +16,7 @@
     <!--        <property name="name" value="porsche"/>-->
     <!--    </bean>-->
 
-    <bean id="finishedListener" class="mini.spring.beans.listener.ContextFinishedListener"/>
+    <bean id="finishedListener" class="mini.spring.ioc.listener.ContextFinishedListener"/>
 
     <!--    <bean class="mini.spring.test.ioc.CustomBeanFactoryPostProcessor"/>-->
 

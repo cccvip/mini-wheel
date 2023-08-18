@@ -6,15 +6,15 @@ package mini.spring.test.ioc;
 
 
 import cn.hutool.core.io.IoUtil;
-import mini.spring.beans.context.ClassPathXmlApplicationContext;
-import mini.spring.beans.factory.bean.BeanDefinition;
-import mini.spring.beans.factory.bean.PropertyValue;
-import mini.spring.beans.factory.bean.PropertyValues;
-import mini.spring.beans.factory.exception.BeanException;
-import mini.spring.beans.factory.support.DefaultListableBeanFactory;
-import mini.spring.beans.reader.XmlBeanDefinitionReader;
-import mini.spring.beans.resources.Resources;
-import mini.spring.beans.resources.impl.DefaultResourceLoader;
+import mini.spring.ioc.context.ClassPathXmlApplicationContext;
+import mini.spring.ioc.factory.bean.BeanDefinition;
+import mini.spring.ioc.factory.bean.PropertyValue;
+import mini.spring.ioc.factory.bean.PropertyValues;
+import mini.spring.ioc.factory.exception.BeanException;
+import mini.spring.ioc.factory.support.DefaultListableBeanFactory;
+import mini.spring.ioc.reader.XmlBeanDefinitionReader;
+import mini.spring.ioc.resources.Resources;
+import mini.spring.ioc.resources.impl.DefaultResourceLoader;
 import mini.spring.test.entity.Car;
 import mini.spring.test.entity.Person;
 import mini.spring.test.service.AppService;

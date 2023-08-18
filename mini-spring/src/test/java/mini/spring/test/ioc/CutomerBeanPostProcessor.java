@@ -5,7 +5,7 @@
 package mini.spring.test.ioc;
 
 
-import mini.spring.beans.factory.config.BeanPostProcessor;
+import mini.spring.ioc.factory.config.BeanPostProcessor;
 
 /**
  * CutomerBeanPostProcessor.

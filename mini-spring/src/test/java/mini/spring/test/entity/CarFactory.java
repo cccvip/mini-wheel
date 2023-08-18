@@ -1,6 +1,6 @@
 package mini.spring.test.entity;
 
-import mini.spring.beans.factory.bean.FactoryBean;
+import mini.spring.ioc.factory.bean.FactoryBean;
 
 /**
  * @description:

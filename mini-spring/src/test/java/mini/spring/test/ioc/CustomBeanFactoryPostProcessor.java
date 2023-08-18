@@ -5,12 +5,12 @@
 package mini.spring.test.ioc;
 
 
-import mini.spring.beans.factory.bean.BeanDefinition;
-import mini.spring.beans.factory.bean.ConfigurableListableBeanFactory;
-import mini.spring.beans.factory.bean.PropertyValue;
-import mini.spring.beans.factory.bean.PropertyValues;
-import mini.spring.beans.factory.config.BeanFactoryPostProcessor;
-import mini.spring.beans.factory.exception.BeanException;
+import mini.spring.ioc.factory.bean.BeanDefinition;
+import mini.spring.ioc.factory.bean.ConfigurableListableBeanFactory;
+import mini.spring.ioc.factory.bean.PropertyValue;
+import mini.spring.ioc.factory.bean.PropertyValues;
+import mini.spring.ioc.factory.config.BeanFactoryPostProcessor;
+import mini.spring.ioc.factory.exception.BeanException;
 
 /**
  * CustomBeanFactoryPostProcessor.
