@@ -43,7 +43,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeanException(e.getLocalizedMessage());
             }
         }
+        System.out.println("destroy bean finished");
     }
-
 
 }

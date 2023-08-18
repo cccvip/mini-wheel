@@ -6,5 +6,9 @@ package mini.spring.beans.factory.config;
  * @date: 2023/8/12
  */
 public interface SingletonBeanRegistry {
+
     Object getSingleton(String beanName);
+
+    void addSingleton(String beanName,Object bean);
+
 }

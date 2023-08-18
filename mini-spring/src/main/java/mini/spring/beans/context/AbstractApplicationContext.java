@@ -10,8 +10,14 @@ import mini.spring.beans.factory.bean.ConfigurableListableBeanFactory;
 import mini.spring.beans.factory.config.BeanFactoryPostProcessor;
 import mini.spring.beans.factory.config.BeanPostProcessor;
 import mini.spring.beans.factory.exception.BeanException;
+import mini.spring.beans.listener.ContextFinishedContext;
+import mini.spring.beans.listener.event.ApplicationEvent;
+import mini.spring.beans.listener.event.ApplicationListener;
+import mini.spring.beans.listener.impl.AbstractApplicationEventMulticaster;
+import mini.spring.beans.listener.impl.SimpleApplicationEventMulticaster;
 import mini.spring.beans.resources.impl.DefaultResourceLoader;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -20,6 +26,10 @@ import java.util.Map;
  * @author Carl, 2023-08-14 11:01
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+
+    public static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME = "applicationEventMulticaster";
+
+    private AbstractApplicationEventMulticaster abstractApplicationEventMulticaster;
 
     //创建BeanFactory
     //读取XML文件
@@ -45,10 +55,37 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //添加BeanPostProcessor
         invokeBeanPostProcessors(beanFactory);
 
+        initMultiCaster(beanFactory);
+
+        registerApplicationListener();
+
+        //核心步骤
         //初始化单例Bean
         beanFactory.preInstantiateSingletons();
+
+        //推送初始化完成的事件
+        publishFinishContext();
     }
 
+    private void publishFinishContext() throws BeanException {
+        publishApplicationEvent(new ContextFinishedContext(this));
+    }
+
+    //创建监听器的bean
+    private void initMultiCaster(ConfigurableListableBeanFactory beanFactory) {
+        abstractApplicationEventMulticaster = new SimpleApplicationEventMulticaster();
+        beanFactory.addSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, abstractApplicationEventMulticaster);
+    }
+
+    //开启事件监听
+    private void registerApplicationListener() throws BeanException {
+        Collection<ApplicationListener> applicationListeners = getBeansOfType(ApplicationListener.class).values();
+        for (ApplicationListener applicationListener : applicationListeners) {
+            abstractApplicationEventMulticaster.addListener(applicationListener);
+        }
+    }
+
+    //执行BeanPostProcessor
     private void invokeBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) throws BeanException {
         Map<String, BeanPostProcessor> beanFactoryPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanFactoryPostProcessorMap.values()) {
@@ -92,6 +129,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         return getBeanFactory().getBean(name, requiredType);
     }
 
+    @Override
+    public void publishApplicationEvent(ApplicationEvent applicationEvent) throws BeanException {
+        abstractApplicationEventMulticaster.multiEvent(applicationEvent);
+    }
 
     @Override
     public void registerShutdownWork() {
