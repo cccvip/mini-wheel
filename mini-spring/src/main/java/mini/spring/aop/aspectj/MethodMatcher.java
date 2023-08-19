@@ -2,7 +2,7 @@
  * All Rights Reserved.
  *
  */
-package mini.spring.aop;
+package mini.spring.aop.aspectj;
 
 
 import java.lang.reflect.Method;
