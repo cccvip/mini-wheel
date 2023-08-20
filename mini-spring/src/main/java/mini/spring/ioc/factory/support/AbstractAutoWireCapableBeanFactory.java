@@ -32,10 +32,10 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
     @Override
     public Object createBean(String name, BeanDefinition beanDefinition) throws BeanException {
         //创建实例化是否需要创建对应的代理对象,非真正的对象
-        Object bean = resolveBeforeInstantiation(name, beanDefinition);
-        if (bean != null) {
-            return bean;
-        }
+        // Object bean = resolveBeforeInstantiation(name, beanDefinition);
+        // if (bean != null) {
+        //    return bean;
+        //  }
         //真正的Bean
         return doCreateBean(name, beanDefinition);
     }
@@ -68,7 +68,7 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         // earlySingletonObjects.put(name, object);
 
         //我们需要暴露的Bean是一个代理的bean,而不是完全实例化后的bean
-        if(beanDefinition.getSingleton()){
+        if (beanDefinition.getSingleton()) {
             Object finalObject = object;
             addSingletonFactory(name, new ObjectFactory<Object>() {
                 @Override
@@ -79,12 +79,10 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         }
 
         //如果当前类被Aop拦截 则暂时不执行后续逻辑,直接返回当前代理类
-        boolean continueWithPropertyPopulation = applyBeanPostProcessorsAfterInstantiation(name, object);
-        if (!continueWithPropertyPopulation) {
-            return object;
-        }
+
         //属性填充
         applyPropertyValues(name, object, beanDefinition);
+
 
         try {
             object = initializeBean(name, object, beanDefinition);
@@ -149,6 +147,7 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         return continueWithPropertyPopulation;
     }
 
+
     private void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) throws BeanException {
         try {
             for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
@@ -156,15 +155,12 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
                 Object value = propertyValue.getValue();
                 if (value instanceof BeanReference) {
                     BeanReference beanReference = (BeanReference) value;
+
                     value = getBean(beanReference.getName());
                 } else {
 //                    System.out.println(beanName);
 //                    System.out.println("=============");
                 }
-                System.out.println(bean);
-                System.out.println(name);
-                System.out.println(value);
-                System.out.println("=============");
                 //通过反射设置属性
                 BeanUtil.setFieldValue(bean, name, value);
             }
@@ -173,7 +169,6 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
             throw new BeanException("Error setting property values for bean: " + beanName, ex);
         }
     }
-
 
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {

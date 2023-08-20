@@ -53,7 +53,7 @@ public class AutoProxyTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(resource);
         A a = applicationContext.getBean("a", A.class);
         B b = applicationContext.getBean("b", B.class);
-        System.out.println(a.getB());
+        System.out.println(a);
         System.out.println(b);
     }
 
