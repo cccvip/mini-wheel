@@ -15,6 +15,16 @@ public class BeanDefinition {
 
     private String destroyMethod;
 
+    private Boolean isSingleton=true;
+
+    public Boolean getSingleton() {
+        return isSingleton;
+    }
+
+    public void setSingleton(Boolean singleton) {
+        isSingleton = singleton;
+    }
+
     public BeanDefinition(Class beanClass) {
         this(beanClass, null);
     }

@@ -50,9 +50,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     private Object getObjectForBeanInstance(Object beanInstance, String beanName) throws BeanException {
         Object object = beanInstance;
         if (beanInstance instanceof FactoryBean) {
-
             FactoryBean factoryBean = (FactoryBean) beanInstance;
-
             try {
                 if (factoryBean.isSingleton()) {
                     object = this.factoryBeanObjectCache.get(beanName);
@@ -69,6 +67,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
             }
         }
         return object;
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
     }
 
     @Override

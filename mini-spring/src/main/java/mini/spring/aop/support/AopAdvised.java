@@ -18,6 +18,17 @@ public class AopAdvised {
 
     private MethodMatcher methodMatcher;
 
+    //是否使用cglib proxy
+    private boolean cglibProxy;
+
+    public boolean isCglibProxy() {
+        return cglibProxy;
+    }
+
+    public void setCglibProxy(boolean cglibProxy) {
+        this.cglibProxy = cglibProxy;
+    }
+
     public Object getTarget() {
         return target;
     }

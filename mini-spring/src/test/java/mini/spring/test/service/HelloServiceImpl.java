@@ -7,7 +7,7 @@ package mini.spring.test.service;
  */
 public class HelloServiceImpl implements HelloService {
     @Override
-    public void hello() {
-        System.out.println("hello");
+    public String hello() {
+        return "hello";
     }
 }

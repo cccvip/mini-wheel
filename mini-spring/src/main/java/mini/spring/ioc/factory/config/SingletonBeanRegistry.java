@@ -1,5 +1,7 @@
 package mini.spring.ioc.factory.config;
 
+import mini.spring.ioc.factory.exception.BeanException;
+
 /**
  * @description: 单例Bean的注册管理
  * @author：carl
@@ -7,7 +9,7 @@ package mini.spring.ioc.factory.config;
  */
 public interface SingletonBeanRegistry {
 
-    Object getSingleton(String beanName);
+    Object getSingleton(String beanName) throws BeanException;
 
     void addSingleton(String beanName,Object bean);
 
