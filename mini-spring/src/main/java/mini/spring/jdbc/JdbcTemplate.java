@@ -29,18 +29,11 @@ public class JdbcTemplate {
         this.dataSource = dataSource;
     }
 
-    public JdbcTemplate(DataSourceConfig dataSourceConfig) {
-        HikariConfig config = new HikariConfig();
-        config.setAutoCommit(false);
-        config.setDriverClassName(dataSourceConfig.getDriverClassName());
-        config.setJdbcUrl(dataSourceConfig.getUrl());
-        config.setMaximumPoolSize(dataSourceConfig.getMaxPoolSize());
-        config.setMinimumIdle(dataSourceConfig.getMinPoolSize());
-        config.setConnectionTimeout(dataSourceConfig.getTimeout());
+    public JdbcTemplate(HikariConfig config) {
         this.dataSource = new HikariDataSource(config);
     }
 
-    public <T> T execute(Connection conn, String sql, RowMapper<T> rowMapper, Object... args)  {
+    public <T> T execute(Connection conn, String sql, RowMapper<T> rowMapper, Object... args) {
         try {
             PreparedStatementCreator preparedStatementCreator = new PreparedStatementCreator();
             PreparedStatement preparedStatement = preparedStatementCreator.createPreparedStatement(conn, sql, args);
@@ -49,32 +42,31 @@ public class JdbcTemplate {
             T result = rowMapper.mapRow(resultSet, 1);
             return result;
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
             try {
-                conn.rollback();
+                conn.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            return null;
         }
     }
 
-    public <T> T execute(String sql, RowMapper<T> rowMapper, Object... args) throws Exception {
-        Connection connection = TransactionalUtils.getCurrentConnection();
-        if (connection == null) {
-            connection = this.dataSource.getConnection();
-        }
-        return execute(connection, sql, rowMapper, args);
+    public <T> T executeQuery(String sql, RowMapper<T> rowMapper, Object... args) throws Exception {
+        return execute(this.dataSource.getConnection(), sql, rowMapper, args);
     }
 
-    public void executeUpdate(String sql) throws Exception {
-        try (Connection newConn = dataSource.getConnection()) {
-            newConn.setAutoCommit(false);
-            Statement statement = newConn.createStatement();
-            int result = statement.executeUpdate(sql);
-            System.out.println(result);
-            newConn.commit();
-        } catch (SQLException e) {
-            throw new Exception(e);
+    public void executeUpdateWithTx(String sql) throws Exception {
+        Connection connection = this.dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            connection.rollback();
         }
     }
 
