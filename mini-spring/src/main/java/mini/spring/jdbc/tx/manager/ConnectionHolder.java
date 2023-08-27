@@ -23,4 +23,10 @@ public class ConnectionHolder {
     public void setCurrentConnection(Connection currentConnection) {
         this.currentConnection = currentConnection;
     }
+
+
+    public void clear() {
+    }
+
+
 }

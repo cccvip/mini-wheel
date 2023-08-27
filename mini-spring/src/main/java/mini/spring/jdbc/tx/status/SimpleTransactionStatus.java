@@ -28,4 +28,9 @@ public class SimpleTransactionStatus extends AbstractTransactionStatus {
     public boolean isNewTransaction() {
         return newTransaction;
     }
+
+
+    public Object getTransaction() {
+        return transaction;
+    }
 }
