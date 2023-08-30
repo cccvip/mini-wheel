@@ -12,6 +12,7 @@
         <module>mini-spring</module>
         <module>mini-redis</module>
         <module>mini-mysql</module>
+        <module>mini-mybaits</module>
     </modules>
 
     <dependencyManagement>

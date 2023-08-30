@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -14,7 +13,6 @@ import java.util.Map;
  * TransactionSynchronizationManager.
  *
  * @author Carl, 2023-08-24 17:03
- * @version CrisisGo v1.0
  */
 public class TransactionSynchronizationManager {
 
