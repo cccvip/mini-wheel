@@ -8,6 +8,10 @@ package mini.spring.jdbc.tx.manager;
 import mini.spring.jdbc.tx.TransactionException;
 import mini.spring.jdbc.tx.status.SimpleTransactionStatus;
 import mini.spring.jdbc.tx.status.TransactionStatus;
+import mini.spring.jdbc.tx.sync.TransactionSynchronizationManager;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * PlatformTransactionManager.
@@ -20,69 +24,82 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
     @Override
     public TransactionStatus getTransaction() throws TransactionException {
+        //创建一个新的事务
         Object transaction = doGetTransaction();
-//        // Check definition settings for new transaction.
-//        if (def.getTimeout() < TransactionDefinition.TIMEOUT_DEFAULT) {
-//            throw new InvalidTimeoutException("Invalid transaction timeout", def.getTimeout());
-//        }
-//
-//        // No existing transaction found -> check propagation behavior to find out how to proceed.
-//        if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_MANDATORY) {
-//            throw new IllegalTransactionStateException(
-//                    "No existing transaction found for transaction marked with propagation 'mandatory'");
-//        }
-//        else if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||
-//                def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||
-//                def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
-//            SuspendedResourcesHolder suspendedResources = suspend(null);
-//            if (debugEnabled) {
-//                logger.debug("Creating new transaction with name [" + def.getName() + "]: " + def);
-//            }
-//            try {
-//                return startTransaction(def, transaction, debugEnabled, suspendedResources);
-//            }
-//            catch (RuntimeException | Error ex) {
-//                resume(null, suspendedResources);
-//                throw ex;
-//            }
-//        }
-//        else {
-//            // Create "empty" transaction: no actual transaction, but potentially synchronization.
-//            if (def.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT && logger.isWarnEnabled()) {
-//                logger.warn("Custom isolation level specified but no actual transaction initiated; " +
-//                        "isolation level will effectively be ignored: " + def);
-//            }
-//            boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
-//            return prepareTransactionStatus(def, null, true, newSynchronization, debugEnabled, null);
-//        }
-        return transactionStatus;
+        return prepareTransactionStatus(transaction, true);
     }
+
+    protected final SimpleTransactionStatus prepareTransactionStatus(Object transaction, boolean newTransaction) {
+
+        SimpleTransactionStatus status = new SimpleTransactionStatus(transaction, newTransaction);
+        prepareSynchronization(status);
+        return status;
+    }
+
+    protected void prepareSynchronization(SimpleTransactionStatus status) {
+        TransactionSynchronizationManager.setActualTransactionActive(status.isNewTransaction());
+    }
+
 
     @Override
     public void commit(TransactionStatus transactionStatus) throws TransactionException {
         processCommit((SimpleTransactionStatus) transactionStatus);
     }
 
-    private void processCommit(SimpleTransactionStatus transactionStatus) {
+    private void processCommit(SimpleTransactionStatus transactionStatus) throws TransactionException {
         try {
             if (transactionStatus.isNewTransaction()) {
                 doCommit(transactionStatus);
             }
         } catch (Exception e) {
-
+            //回滚
+            doRollbackOnCommitException(transactionStatus, e);
         } finally {
-
+            //资源关闭
+            cleanupAfterCompletion(transactionStatus);
         }
+    }
+
+    private void doRollbackOnCommitException(SimpleTransactionStatus status, Throwable ex) throws TransactionException {
+        try {
+            if (status.isNewTransaction()) {
+                doRollback(status);
+            }
+        } catch (RuntimeException | Error rbex) {
+            throw rbex;
+        }
+    }
+
+    private void cleanupAfterCompletion(SimpleTransactionStatus status) {
+        status.setCompleted(true);
+        doCleanupAfterCompletion(status.getTransaction());
     }
 
     @Override
     public void rollback(TransactionStatus t) throws TransactionException {
-
-
+        SimpleTransactionStatus defStatus = (SimpleTransactionStatus) t;
+        processRollback(defStatus, false);
     }
+
+    private void processRollback(SimpleTransactionStatus transactionStatus, boolean b) {
+
+        try {
+            doRollback(transactionStatus);
+        } catch (Exception e) {
+
+        } finally {
+            //资源关闭
+            cleanupAfterCompletion(transactionStatus);
+        }
+    }
+
+    public abstract void doCleanupAfterCompletion(Object transaction) ;
+
+    protected abstract void doBegin(Object transaction) throws TransactionException, SQLException;
 
     protected abstract void doCommit(SimpleTransactionStatus status) throws TransactionException;
 
+    protected abstract void doRollback(SimpleTransactionStatus status) throws TransactionException;
 
     protected abstract Object doGetTransaction() throws TransactionException;
 
