@@ -5,12 +5,11 @@
 package org.mini.mybaits.mapper;
 
 
-import com.alibaba.fastjson2.JSON;
+import org.mini.mybaits.session.SqlSession;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * MapperProxy.
@@ -20,9 +19,9 @@ import java.util.Map;
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
     private final Class<T> mapperInterface;
-    private final Map<String, String> sqlSession;
+    private final SqlSession sqlSession;
 
-    public MapperProxy(Class mapperInterface, Map<String, String> sqlSession) {
+    public MapperProxy(Class mapperInterface, SqlSession sqlSession) {
         this.mapperInterface = mapperInterface;
         this.sqlSession = sqlSession;
     }
