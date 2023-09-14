@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -30,7 +29,6 @@ import java.util.regex.Pattern;
  * XmlSqlSessionBuilder.
  *
  * @author Carl, 2023-09-14 9:59
- * @version CrisisGo v1.0
  */
 public class XmlSqlSessionBuilder extends AbstractSqlSessionBuilder {
 

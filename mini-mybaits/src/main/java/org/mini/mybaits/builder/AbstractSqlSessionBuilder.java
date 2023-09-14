@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -12,7 +11,6 @@ import org.mini.mybaits.session.Configuration;
  * AbstraceSqlSessionBuilder.
  *
  * @author Carl, 2023-09-14 9:49
- * @version CrisisGo v1.0
  */
 public abstract class AbstractSqlSessionBuilder implements SqlSessionBuilder {
 

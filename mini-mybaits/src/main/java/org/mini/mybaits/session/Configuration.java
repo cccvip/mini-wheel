@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -8,7 +7,6 @@ package org.mini.mybaits.session;
 
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.registry.MapperRegistry;
-import org.mini.mybaits.session.defaults.DefaultSqlSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,6 @@ import java.util.Map;
  * Configuration.
  *
  * @author Carl, 2023-09-14 9:52
- * @version CrisisGo v1.0
  */
 public class Configuration {
     //注册表

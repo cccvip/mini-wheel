@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -10,7 +9,6 @@ package org.mini.mybaits.po;
  * User.
  *
  * @author Carl, 2023-09-14 10:44
- * @version CrisisGo v1.0
  */
 public class User {
 

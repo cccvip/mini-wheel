@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -16,7 +15,6 @@ import java.lang.reflect.Method;
 /**
  * MapperMethod.
  * 
- * @version CrisisGo v1.0
  * @author Carl, 2023-09-14 11:09
  */
 public class MapperMethod {

@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -12,7 +11,6 @@ import java.util.Map;
  * MappingStatement.
  *
  * @author Carl, 2023-09-14 9:53
- * @version CrisisGo v1.0
  */
 public class MappingStatement {
 

@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -14,7 +13,6 @@ import java.io.Reader;
 /**
  * Resources.
  * 
- * @version CrisisGo v1.0
  * @author Carl, 2023-09-14 10:12
  */
 public class Resources {
