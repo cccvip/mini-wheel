@@ -30,8 +30,8 @@ public class ProxyTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         IUserDao userDao = sqlSession.getMapper(IUserDao.class);
         // 3. 测试验证
-        String res = userDao.queryUserName();
-        System.out.println(res);
+        User res = userDao.queryUserName(1);
+        System.out.println(res.getName());
     }
 
 

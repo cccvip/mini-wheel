@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mini.mybaits.dao.IUserDao">
 
-    <select id="queryUserName" parameterType="java.lang.Long" resultType="String">
+    <select id="queryUserName" parameterType="java.lang.Long" resultType="org.mini.mybaits.po.User">
         SELECT name
-        FROM user
+        FROM student
         where id = #{id}
     </select>
 

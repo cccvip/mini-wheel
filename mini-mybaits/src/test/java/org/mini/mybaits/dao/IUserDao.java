@@ -5,11 +5,13 @@
 package org.mini.mybaits.dao;
 
 
+import org.mini.mybaits.po.User;
+
 /**
  * IUserDao.
  *
  * @author Carl, 2023-08-30 10:23
  */
 public interface IUserDao {
-    String queryUserName();
+    User queryUserName(long id);
 }
