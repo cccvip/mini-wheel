@@ -5,8 +5,6 @@
 package org.mini.mybaits.session;
 
 
-import java.sql.Connection;
-
 /**
  * SqlSession.
  *
@@ -16,4 +14,7 @@ public interface SqlSession {
 
     <T> T getMapper(Class<T> t);
 
+    Configuration configuration();
+
+    <T> T selectOne(String name, Object[] args);
 }

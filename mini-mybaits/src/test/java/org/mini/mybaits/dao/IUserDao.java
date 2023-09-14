@@ -11,5 +11,5 @@ package org.mini.mybaits.dao;
  * @author Carl, 2023-08-30 10:23
  */
 public interface IUserDao {
-    void queryUserName();
+    String queryUserName();
 }

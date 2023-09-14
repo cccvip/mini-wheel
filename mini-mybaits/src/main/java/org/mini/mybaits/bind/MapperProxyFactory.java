@@ -2,14 +2,15 @@
  * All Rights Reserved.
  *
  */
-package org.mini.mybaits.factory;
+package org.mini.mybaits.bind;
 
 
-import org.mini.mybaits.mapper.MapperProxy;
 import org.mini.mybaits.session.SqlSession;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * MapperProxyFactory.
@@ -24,8 +25,10 @@ public class MapperProxyFactory<T> {
         this.mapperInterface = mapperInterface;
     }
 
+    private Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
+
     public T newInstance(SqlSession sqlSession) {
-        MapperProxy<T> proxy = new MapperProxy<>(mapperInterface, sqlSession);
+        MapperProxy<T> proxy = new MapperProxy<>(mapperInterface, sqlSession, methodCache);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(),
                 new Class[]{mapperInterface},
                 proxy);

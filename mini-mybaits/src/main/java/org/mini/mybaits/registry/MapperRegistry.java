@@ -6,7 +6,7 @@ package org.mini.mybaits.registry;
 
 
 import cn.hutool.core.lang.ClassScanner;
-import org.mini.mybaits.factory.MapperProxyFactory;
+import org.mini.mybaits.bind.MapperProxyFactory;
 import org.mini.mybaits.session.SqlSession;
 
 import java.util.HashMap;
