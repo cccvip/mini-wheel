@@ -106,7 +106,6 @@ public class UnpoolDataSource implements DataSource {
         if (!registeredDrivers.containsKey(driver)) {
             try {
                 Class<?> driverType = Class.forName(driver, true, driverClassLoader);
-                // https://www.kfu.com/~nsayer/Java/dyn-jdbc.html
                 Driver driverInstance = (Driver) driverType.newInstance();
                 DriverManager.registerDriver(new DriverProxy(driverInstance));
                 registeredDrivers.put(driver, driverInstance);
