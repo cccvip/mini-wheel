@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -17,7 +16,6 @@ import java.sql.SQLException;
  * 池化连接
  *
  * @author Carl, 2023-09-22 14:22
- * @version CrisisGo v1.0
  */
 public class PooledConnection implements InvocationHandler {
 

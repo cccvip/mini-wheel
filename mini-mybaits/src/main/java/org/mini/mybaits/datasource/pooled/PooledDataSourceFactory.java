@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -14,7 +13,6 @@ import javax.sql.DataSource;
  * PooledDataSourceFactory.
  *
  * @author Carl, 2023-10-08 11:25
- * @version CrisisGo v1.0
  */
 public class PooledDataSourceFactory extends UnpoolDataSourceFactory {
 

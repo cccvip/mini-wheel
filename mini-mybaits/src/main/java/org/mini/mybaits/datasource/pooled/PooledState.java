@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -12,7 +11,6 @@ import java.util.List;
 /**
  * PooledState.
  * 连接池状态
- * @version CrisisGo v1.0
  * @author Carl, 2023-09-22 14:19
  */
 public class PooledState {
