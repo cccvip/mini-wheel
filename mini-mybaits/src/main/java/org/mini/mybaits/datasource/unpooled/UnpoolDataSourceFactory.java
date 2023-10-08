@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class UnpoolDataSourceFactory implements DataSourceFactory {
 
-    Properties properties;
+    public Properties properties;
 
     @Override
     public void setProperties(Properties props) {

@@ -35,11 +35,17 @@ public class PooledConnection implements InvocationHandler {
 
     private boolean valid;
 
-    public PooledConnection(PooledDataSource dataSource, Connection realConnection) {
+    public PooledConnection(Connection realConnection, PooledDataSource dataSource) {
         this.dataSource = dataSource;
         this.realConnection = realConnection;
         //生成代理链接
         this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), new Class[]{Connection.class}, this);
+        //链接有效
+        this.valid = true;
+    }
+
+    public int getRealConnectionHashCode() {
+        return realConnection == null ? 0 : realConnection.hashCode();
     }
 
     @Override
@@ -107,6 +113,7 @@ public class PooledConnection implements InvocationHandler {
     public void invalidate() {
         valid = false;
     }
+
     private void checkConnection() throws SQLException {
         if (!valid) {
             throw new SQLException("Error accessing PooledConnection. Connection is invalid.");

@@ -12,6 +12,7 @@ import org.mini.mybaits.datasource.unpooled.UnpoolDataSource;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
@@ -35,7 +36,7 @@ public class PooledDataSource implements DataSource {
     }
 
     //最大连接数
-    private int poolMaximumActiveConnections;
+    private int poolMaximumActiveConnections = 10;
 
     //数据源
     private long pooledMaxCheckTimeOut = 20000;
@@ -55,12 +56,12 @@ public class PooledDataSource implements DataSource {
                 //空闲链接为0
                 if (!state.idleConnections.isEmpty()) {
                     connection = state.idleConnections.remove(0);
-                    logger.info("get connection hashcode {}", connection.hashCode());
+                    logger.info("get connection hashcode {}", connection.getRealConnectionHashCode());
                 } else {
                     // 活跃连接数不足,需要生成连接
                     if (state.activeConnections.size() < poolMaximumActiveConnections) {
-                        connection = new PooledConnection(this, dataSource.getConnection());
-                        logger.info("Created connection {}", connection.hashCode());
+                        connection = new PooledConnection(dataSource.getConnection(), this);
+                        logger.info("Created connection {}", connection.getRealConnectionHashCode());
                     } else {
                         // 取得活跃链接列表的第一个，也就是最老的一个连接
                         PooledConnection oldestActiveConnection = state.activeConnections.get(0);
@@ -73,9 +74,9 @@ public class PooledDataSource implements DataSource {
                                 oldestActiveConnection.getRealConnection().rollback();
                             }
                             // 删掉最老的链接，然后重新实例化一个新的链接
-                            connection = new PooledConnection(this, oldestActiveConnection.getRealConnection());
+                            connection = new PooledConnection(oldestActiveConnection.getRealConnection(), this);
                             oldestActiveConnection.invalidate();
-                            logger.info("Claimed overdue connection " + connection.hashCode() + ".");
+                            logger.info("Claimed overdue connection " + connection.getRealConnectionHashCode() + ".");
                         } else {
                             try {
                                 logger.info("Waiting as long as " + poolTimeToWait + " milliseconds for connection.");
@@ -96,7 +97,7 @@ public class PooledDataSource implements DataSource {
                         connection.setCreateTimeStamp(System.currentTimeMillis());
                         state.activeConnections.add(connection);
                     } else {
-                        logger.info("A bad connection (" + connection.hashCode() + ") was returned from the pool, getting another connection.");
+                        logger.info("A bad connection (" + connection.getRealConnectionHashCode() + ") was returned from the pool, getting another connection.");
                         // 如果没拿到，统计信息：失败链接 +1
                         connection = null;
                         localBadConnectionCount++;
@@ -133,10 +134,10 @@ public class PooledDataSource implements DataSource {
                         connection.getRealConnection().rollback();
                     }
                     // 实例化一个新的DB连接，加入到idle列表
-                    PooledConnection newConnection = new PooledConnection(this, connection.getRealConnection());
+                    PooledConnection newConnection = new PooledConnection(connection.getRealConnection(), this);
                     state.idleConnections.add(newConnection);
                     connection.invalidate();
-                    logger.info("Returned connection " + newConnection.hashCode() + " to pool.");
+                    logger.info("Returned connection " + newConnection.getRealConnectionHashCode() + " to pool.");
                     // 通知其他线程可以来抢DB连接了
                     state.notifyAll();
                 }
@@ -147,11 +148,11 @@ public class PooledDataSource implements DataSource {
                     }
                     // 将connection关闭
                     connection.getRealConnection().close();
-                    logger.info("Closed connection " + connection.hashCode() + ".");
+                    logger.info("Closed connection " + connection.getRealConnectionHashCode() + ".");
                     connection.invalidate();
                 }
             } else {
-                logger.info("A bad connection (" + connection.hashCode() + ") attempted to return to the pool, discarding connection.");
+                logger.info("A bad connection (" + connection.getRealConnectionHashCode() + ") attempted to return to the pool, discarding connection.");
             }
         }
     }
@@ -196,17 +197,17 @@ public class PooledDataSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return null;
+        return getFreeConnection(dataSource.getUsername(), dataSource.getPassword()).getProxyConnection();
     }
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        return null;
+        return getFreeConnection(username, password).getProxyConnection();
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+        throw new SQLException(getClass().getName() + " is not a wrapper.");
     }
 
     @Override
@@ -216,26 +217,48 @@ public class PooledDataSource implements DataSource {
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {
-        return null;
+        return DriverManager.getLogWriter();
     }
 
     @Override
     public void setLogWriter(PrintWriter out) throws SQLException {
-
+        DriverManager.setLogWriter(out);
     }
 
     @Override
     public void setLoginTimeout(int seconds) throws SQLException {
-
+        DriverManager.setLoginTimeout(seconds);
     }
 
     @Override
     public int getLoginTimeout() throws SQLException {
-        return 0;
+        return DriverManager.getLoginTimeout();
     }
 
     @Override
     public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
+        return java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
+
+
+    public void setDriver(String driver) {
+        dataSource.setDriver(driver);
+        closeAllConnection();
+    }
+
+    public void setUrl(String url) {
+        dataSource.setUrl(url);
+        closeAllConnection();
+    }
+
+    public void setUsername(String username) {
+        dataSource.setUsername(username);
+        closeAllConnection();
+    }
+
+    public void setPassword(String password) {
+        dataSource.setPassword(password);
+        closeAllConnection();
+    }
+
 }

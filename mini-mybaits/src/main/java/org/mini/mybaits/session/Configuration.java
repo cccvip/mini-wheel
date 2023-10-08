@@ -7,6 +7,8 @@ package org.mini.mybaits.session;
 
 import org.mini.mybaits.alias.TypeAliasRegistry;
 import org.mini.mybaits.datasource.druid.DruidDataSourceFactory;
+import org.mini.mybaits.datasource.pooled.PooledDataSourceFactory;
+import org.mini.mybaits.datasource.unpooled.UnpoolDataSourceFactory;
 import org.mini.mybaits.mapping.Environment;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.registry.MapperRegistry;
@@ -36,8 +38,9 @@ public class Configuration {
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("DRUID", DruidDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("UNPOOLED", UnpoolDataSourceFactory.class);
     }
-
 
     public void addMappedStatement(MappingStatement mappedStatement) {
         mappingStatement.put(mappedStatement.getId(), mappedStatement);
