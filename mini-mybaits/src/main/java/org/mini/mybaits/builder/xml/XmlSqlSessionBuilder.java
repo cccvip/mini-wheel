@@ -12,6 +12,7 @@ import org.dom4j.io.SAXReader;
 import org.mini.mybaits.builder.AbstractSqlSessionBuilder;
 import org.mini.mybaits.datasource.DataSourceFactory;
 import org.mini.mybaits.io.Resources;
+import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.Environment;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.mapping.SqlCommandType;
@@ -37,26 +38,33 @@ import java.util.regex.Pattern;
  */
 public class XmlSqlSessionBuilder extends AbstractSqlSessionBuilder {
 
-    Reader reader;
+    private Element root;
 
     public XmlSqlSessionBuilder(Reader reader) {
+        //新建Configuration
         super(new Configuration());
-        this.reader = reader;
+
+        SAXReader saxReader = new SAXReader();
+        Document document = null;
+        try {
+            document = saxReader.read(new InputSource(reader));
+            root = document.getRootElement();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void parse() {
-        SAXReader saxReader = new SAXReader();
+    public Configuration parse() {
+        //扫描mapper方法
         try {
-            Document document = saxReader.read(new InputSource(reader));
-            Element root = document.getRootElement();
-
-            //扫描mapper方法
             addEnvironmentElement(root);
+
             addMapperElement(root);
-        } catch (DocumentException | IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+        return configuration;
     }
 
     private void addEnvironmentElement(Element root) throws IllegalAccessException, InstantiationException {
@@ -127,10 +135,12 @@ public class XmlSqlSessionBuilder extends AbstractSqlSessionBuilder {
                         sql = sql.replace(g1, "?");
                     }
                     String msId = namespace + "." + id;
-                    System.out.println(msId);
                     String nodeName = node.getName();
                     SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
-                    MappingStatement mappedStatement = new MappingStatement(msId, parameterType, resultType, sql, parameter, sqlCommandType);
+
+                    BoundSql boundSql = new BoundSql(sql, parameter, parameterType, resultType);
+
+                    MappingStatement mappedStatement = new MappingStatement.Builder(configuration, msId, sqlCommandType, boundSql).build();
                     // 添加解析 SQL
                     configuration.addMappedStatement(mappedStatement);
                 }

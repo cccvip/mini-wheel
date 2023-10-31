@@ -5,6 +5,8 @@
 package org.mini.mybaits.builder;
 
 
+import org.mini.mybaits.session.Configuration;
+
 /**
  * SqlSessionBuilder.
  *
@@ -12,6 +14,6 @@ package org.mini.mybaits.builder;
  */
 public interface SqlSessionBuilder {
 
-    void parse();
+    Configuration parse();
 
 }

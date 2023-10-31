@@ -5,6 +5,7 @@
 package org.mini.mybaits.session.defaults;
 
 
+import org.mini.mybaits.executor.Executor;
 import org.mini.mybaits.mapping.Environment;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.session.Configuration;
@@ -30,8 +31,11 @@ public class DefaultSqlSession implements SqlSession {
 
     private Configuration configuration;
 
-    public DefaultSqlSession(Configuration configuration) {
+    private Executor executor;
+
+    public DefaultSqlSession(Configuration configuration, Executor executor) {
         this.configuration = configuration;
+        this.executor = executor;
     }
 
     @Override
@@ -45,49 +49,14 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public <T> T selectOne(String name, Object[] args) {
-        MappingStatement mappedStatement = configuration.getMappedStatement(name);
-        Environment environment = configuration.getEnvironment();
-        try {
-            Connection connection = environment.getDataSource().getConnection();
+    public <T> T selectOne(String id, Object[] parameter) {
 
-            String sql = mappedStatement.getSql();
+        MappingStatement ms = configuration.getMappedStatement(id);
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, Long.parseLong(args[0].toString()));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet2Obj(resultSet, Class.forName(mappedStatement.getResultType()));
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
+        List<T> list = executor.query(ms, parameter, null, ms.getBoundSql());
+
+        return list.get(0);
     }
 
-
-    private <T> T resultSet2Obj(ResultSet resultSet, Class<?> clazz) {
-        try {
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            while (resultSet.next()) {
-                T obj = (T) clazz.newInstance();
-                for (int i = 1; i <= columnCount; i++) {
-                    Object value = resultSet.getObject(i);
-                    String columnName = metaData.getColumnName(i);
-                    String setMethod = "set" + columnName.substring(0, 1).toUpperCase() + columnName.substring(1);
-                    Method method;
-                    if (value instanceof Timestamp) {
-                        method = clazz.getMethod(setMethod, Date.class);
-                    } else {
-                        method = clazz.getMethod(setMethod, value.getClass());
-                    }
-                    method.invoke(obj, value);
-                }
-                return obj;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 }

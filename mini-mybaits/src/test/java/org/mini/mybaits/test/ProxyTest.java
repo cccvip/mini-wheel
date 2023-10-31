@@ -14,6 +14,7 @@ import org.mini.mybaits.io.Resources;
 import org.mini.mybaits.po.User;
 import org.mini.mybaits.session.SqlSession;
 import org.mini.mybaits.session.SqlSessionFactory;
+import org.mini.mybaits.session.SqlSessionFactoryBuilder;
 import org.mini.mybaits.session.defaults.DefaultSqlSessionFactory;
 
 import java.io.IOException;
@@ -29,20 +30,6 @@ import java.sql.SQLException;
 public class ProxyTest {
 
     @Test
-    public void test_SqlSessionFactory() throws IOException {
-        Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
-        SqlSessionFactory sqlSessionFactory = new DefaultSqlSessionFactory(reader);
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
-
-        for (int i = 0; i < 50; i++) {
-            User res = userDao.queryUserName(1);
-            System.out.println(res.getName());
-        }
-    }
-
-
-    @Test
     public void test_pooled() throws SQLException, InterruptedException {
         PooledDataSource pooledDataSource = new PooledDataSource();
         pooledDataSource.setDriver("com.mysql.jdbc.Driver");
@@ -50,8 +37,8 @@ public class ProxyTest {
         pooledDataSource.setUsername("cc");
         pooledDataSource.setPassword("cd123456");
         // 持续获得链接
-        int i=0;
-        while (i<20){
+        int i = 0;
+        while (i < 20) {
             Connection connection = pooledDataSource.getConnection();
             System.out.println(connection);
             Thread.sleep(1000);
@@ -68,8 +55,8 @@ public class ProxyTest {
         pooledDataSource.setUsername("cc");
         pooledDataSource.setPassword("cd123456");
         // 持续获得链接
-        int i=0;
-        while (i<20){
+        int i = 0;
+        while (i < 20) {
             Connection connection = pooledDataSource.getConnection();
             System.out.println(connection);
             connection.close();
@@ -77,7 +64,19 @@ public class ProxyTest {
         }
     }
 
+    @Test
+    public void test_SqlSessionFactory() throws IOException {
+        // 1. 从SqlSessionFactory中获取SqlSession
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
 
+        // 2. 获取映射器对象
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+
+        // 3. 测试验证
+        User user = userDao.queryUserName(1L);
+        System.out.println("测试结果：" + JSON.toJSONString(user));
+    }
 
 
 }

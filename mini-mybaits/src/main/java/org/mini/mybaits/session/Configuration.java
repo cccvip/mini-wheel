@@ -9,10 +9,19 @@ import org.mini.mybaits.alias.TypeAliasRegistry;
 import org.mini.mybaits.datasource.druid.DruidDataSourceFactory;
 import org.mini.mybaits.datasource.pooled.PooledDataSourceFactory;
 import org.mini.mybaits.datasource.unpooled.UnpoolDataSourceFactory;
+import org.mini.mybaits.executor.Executor;
+import org.mini.mybaits.executor.SimpleExecutor;
+import org.mini.mybaits.executor.result.DefaultResultSetHandler;
+import org.mini.mybaits.executor.result.ResultSetHandler;
+import org.mini.mybaits.executor.statement.PrePareStatementHandler;
+import org.mini.mybaits.executor.statement.StatementHandler;
+import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.Environment;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.registry.MapperRegistry;
+import org.mini.mybaits.transaction.Transaction;
 import org.mini.mybaits.transaction.jdbc.JdbcTransactionFactory;
+import sun.plugin2.main.server.ResultHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +82,30 @@ public class Configuration {
 
     public MappingStatement getMappedStatement(String id) {
         return mappingStatement.get(id);
+    }
+
+
+    /**
+     * newResultSetHandler.
+     * 创建结果Handler
+     */
+    public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql) {
+        return new DefaultResultSetHandler(boundSql);
+    }
+
+    /**
+     * 创建语句处理器
+     */
+    public StatementHandler newStatementHandler(Executor executor, MappingStatement mappedStatement, Object parameter,
+                                                BoundSql boundSql) {
+        return new PrePareStatementHandler(executor, mappedStatement, parameter, boundSql);
+    }
+
+    /**
+     * 生产执行器
+     */
+    public Executor newExecutor(Transaction transaction) {
+        return new SimpleExecutor(this, transaction);
     }
 
 }
