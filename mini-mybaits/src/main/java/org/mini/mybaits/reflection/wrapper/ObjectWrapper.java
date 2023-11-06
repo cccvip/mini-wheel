@@ -1,9 +1,5 @@
-/*
- * Copyright @2023 CrisisGo Inc.
- * All Rights Reserved.
- *
- */
 package org.mini.mybaits.reflection.wrapper;
+
 
 
 import org.mini.mybaits.reflection.MetaObject;
@@ -12,12 +8,6 @@ import org.mini.mybaits.reflection.property.PropertyTokenizer;
 
 import java.util.List;
 
-/**
- * ObjecWrapper.
- *
- * @author Carl, 2023-11-02 14:07
- * @version CrisisGo v1.0
- */
 public interface ObjectWrapper {
 
     // get

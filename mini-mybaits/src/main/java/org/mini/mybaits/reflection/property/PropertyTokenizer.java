@@ -1,51 +1,55 @@
-/*
- * Copyright @2023 CrisisGo Inc.
- * All Rights Reserved.
- *
- */
 package org.mini.mybaits.reflection.property;
-
 
 import java.util.Iterator;
 
-/**
- * PropertyTokenizer.
- *
- * @author Carl, 2023-11-02 14:09
- * @version CrisisGo v1.0
- */
+
 public class PropertyTokenizer implements Iterable<PropertyTokenizer>, Iterator<PropertyTokenizer> {
 
-    //student[0].name
+    // 例子：班级[0].学生.成绩
+    // 班级
     private String name;
-
+    // 班级[0]
     private String indexedName;
-
+    // 0
     private String index;
-
+    // 学生.成绩
     private String children;
 
-    public PropertyTokenizer(String fullName) {
-        int point = fullName.indexOf(".");
-        if (point > -1) {
-            name = fullName.substring(0, point);
-            children = fullName.substring(point + 1);
+    public PropertyTokenizer(String fullname) {
+        // 班级[0].学生.成绩
+        // 找这个点 .
+        int delim = fullname.indexOf('.');
+        if (delim > -1) {
+            name = fullname.substring(0, delim);
+            children = fullname.substring(delim + 1);
         } else {
-            // 找不到.的话，取默认视作不包含children
-            name = fullName;
+            // 找不到.的话，取全部部分
+            name = fullname;
             children = null;
         }
         indexedName = name;
         // 把中括号里的数字给解析出来
-        point = name.indexOf('[');
-        if (point > -1) {
-            index = name.substring(point + 1, name.length() - 1);
-            name = name.substring(0, point);
+        delim = name.indexOf('[');
+        if (delim > -1) {
+            index = name.substring(delim + 1, name.length() - 1);
+            name = name.substring(0, delim);
         }
     }
-    @Override
-    public Iterator<PropertyTokenizer> iterator() {
-        return this;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public String getIndexedName() {
+        return indexedName;
+    }
+
+    public String getChildren() {
+        return children;
     }
 
     @Override
@@ -53,40 +57,20 @@ public class PropertyTokenizer implements Iterable<PropertyTokenizer>, Iterator<
         return children != null;
     }
 
+    // 取得下一个,非常简单，直接再通过儿子来new另外一个实例
     @Override
     public PropertyTokenizer next() {
         return new PropertyTokenizer(children);
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Remove is not supported, as it has no meaning in the context of properties.");
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public Iterator<PropertyTokenizer> iterator() {
+        return this;
     }
 
-    public String getIndexedName() {
-        return indexedName;
-    }
-
-    public void setIndexedName(String indexedName) {
-        this.indexedName = indexedName;
-    }
-
-    public String getIndex() {
-        return index;
-    }
-
-    public void setIndex(String index) {
-        this.index = index;
-    }
-
-    public String getChildren() {
-        return children;
-    }
-
-    public void setChildren(String children) {
-        this.children = children;
-    }
 }
