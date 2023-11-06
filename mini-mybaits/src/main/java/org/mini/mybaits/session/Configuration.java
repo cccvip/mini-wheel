@@ -6,6 +6,7 @@ package org.mini.mybaits.session;
 
 
 import org.mini.mybaits.alias.TypeAliasRegistry;
+import org.mini.mybaits.alias.TypeHandlerRegistry;
 import org.mini.mybaits.datasource.druid.DruidDataSourceFactory;
 import org.mini.mybaits.datasource.pooled.PooledDataSourceFactory;
 import org.mini.mybaits.datasource.unpooled.UnpoolDataSourceFactory;
@@ -18,6 +19,11 @@ import org.mini.mybaits.executor.statement.StatementHandler;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.Environment;
 import org.mini.mybaits.mapping.MappingStatement;
+import org.mini.mybaits.reflection.MetaObject;
+import org.mini.mybaits.reflection.factory.DefaultObjectFactory;
+import org.mini.mybaits.reflection.factory.ObjectFactory;
+import org.mini.mybaits.reflection.wrapper.DefaultObjectWrapperFactory;
+import org.mini.mybaits.reflection.wrapper.ObjectWrapperFactory;
 import org.mini.mybaits.registry.MapperRegistry;
 import org.mini.mybaits.transaction.Transaction;
 import org.mini.mybaits.transaction.jdbc.JdbcTransactionFactory;
@@ -41,8 +47,16 @@ public class Configuration {
     //XML SQL解析
     private Map<String, MappingStatement> mappingStatement = new HashMap<>();
 
+    //类型别名
     private TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
 
+    // 类型处理器注册机
+    protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+
+    // 对象工厂和对象包装器工厂
+    protected ObjectFactory objectFactory = new DefaultObjectFactory();
+
+    protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
     //数据源
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
@@ -108,4 +122,11 @@ public class Configuration {
         return new SimpleExecutor(this, transaction);
     }
 
+    public MetaObject newMetaObject(Object object) {
+        return MetaObject.forObject(object, objectFactory, objectWrapperFactory);
+    }
+
+    public TypeHandlerRegistry getTypeHandlerRegistry() {
+        return typeHandlerRegistry;
+    }
 }

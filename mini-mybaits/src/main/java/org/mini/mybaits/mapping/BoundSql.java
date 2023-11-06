@@ -4,6 +4,11 @@
 package org.mini.mybaits.mapping;
 
 
+import org.mini.mybaits.reflection.MetaObject;
+import org.mini.mybaits.session.Configuration;
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,46 +19,20 @@ import java.util.Map;
 public class BoundSql {
 
     private String sql;
-    private Map<Integer, String> parameterMappings;
-    private String parameterType;
-    private String resultType;
+    private List<ParameterMapping> parameterMappings;
+    private Object parameterObject;
+    private Map<String, Object> additionalParameters;
+    private MetaObject metaParameters;
 
-    public BoundSql(String sql, Map<Integer, String> parameterMappings, String parameterType, String resultType) {
+    public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {
         this.sql = sql;
         this.parameterMappings = parameterMappings;
-        this.parameterType = parameterType;
-        this.resultType = resultType;
+        this.parameterObject = parameterObject;
+        this.additionalParameters = new HashMap<>();
+        this.metaParameters = configuration.newMetaObject(additionalParameters);
     }
 
-    public String getSql() {
-        return sql;
-    }
 
-    public void setSql(String sql) {
-        this.sql = sql;
-    }
 
-    public Map<Integer, String> getParameterMappings() {
-        return parameterMappings;
-    }
 
-    public void setParameterMappings(Map<Integer, String> parameterMappings) {
-        this.parameterMappings = parameterMappings;
-    }
-
-    public String getParameterType() {
-        return parameterType;
-    }
-
-    public void setParameterType(String parameterType) {
-        this.parameterType = parameterType;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
-    }
 }
