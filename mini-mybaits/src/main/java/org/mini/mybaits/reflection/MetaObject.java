@@ -48,7 +48,6 @@ public class MetaObject {
 
     public static MetaObject forObject(Object object, ObjectFactory objectFactory, ObjectWrapperFactory objectWrapperFactory) {
         if (object == null) {
-            // 处理一下null,将null包装起来
             return SystemMetaObject.NULL_META_OBJECT;
         } else {
             return new MetaObject(object, objectFactory, objectWrapperFactory);
