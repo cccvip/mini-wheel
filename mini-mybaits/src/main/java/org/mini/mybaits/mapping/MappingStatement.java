@@ -5,6 +5,7 @@
 package org.mini.mybaits.mapping;
 
 
+import org.mini.mybaits.scripting.LanguageDriver;
 import org.mini.mybaits.session.Configuration;
 
 /**
@@ -21,10 +22,9 @@ public class MappingStatement {
     private Configuration configuration;
     private SqlSource sqlSource;
     Class<?> resultType;
+    private LanguageDriver lang;
 
-    MappingStatement() {
-
-    }
+    MappingStatement() {}
 
     //使用构造器模式,初始化实体类
     public static class Builder {
@@ -36,6 +36,7 @@ public class MappingStatement {
             mappingStatement.sqlCommandType = sqlCommandType;
             mappingStatement.sqlSource = sqlSource;
             mappingStatement.resultType = resultType;
+            mappingStatement.lang = configuration.getDefaultScriptingLanguageInstance();
         }
         public MappingStatement build() {
             return mappingStatement;
@@ -80,5 +81,13 @@ public class MappingStatement {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public LanguageDriver getLang() {
+        return lang;
+    }
+
+    public void setLang(LanguageDriver lang) {
+        this.lang = lang;
     }
 }

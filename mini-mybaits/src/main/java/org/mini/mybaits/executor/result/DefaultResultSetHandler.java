@@ -27,7 +27,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     private final BoundSql boundSql;
     private final MappingStatement mappingStatement;
 
-    public DefaultResultSetHandler(BoundSql boundSql,MappingStatement mappedStatement) {
+    public DefaultResultSetHandler(BoundSql boundSql, MappingStatement mappedStatement) {
         this.boundSql = boundSql;
         this.mappingStatement = mappedStatement;
     }
@@ -54,13 +54,17 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     Object value = resultSet.getObject(i);
                     String columnName = metaData.getColumnName(i);
                     String setMethod = "set" + columnName.substring(0, 1).toUpperCase() + columnName.substring(1);
-                    Method method;
+                    Method method = null;
                     if (value instanceof Timestamp) {
                         method = clazz.getMethod(setMethod, Date.class);
+                    } else if (value instanceof String) {
+                        obj = (T) value;
                     } else {
                         method = clazz.getMethod(setMethod, value.getClass());
                     }
-                    method.invoke(obj, value);
+                    if (null != method) {
+                        method.invoke(obj, value);
+                    }
                 }
                 list.add(obj);
             }

@@ -10,6 +10,7 @@ import org.mini.mybaits.mapping.SqlSource;
 import org.mini.mybaits.mapping.sql.StaticSqlSource;
 import org.mini.mybaits.parsing.GenericTokenParser;
 import org.mini.mybaits.parsing.TokenHandler;
+import org.mini.mybaits.reflection.MetaClass;
 import org.mini.mybaits.reflection.MetaObject;
 import org.mini.mybaits.session.Configuration;
 
@@ -56,10 +57,21 @@ public class SqlSourceBuilder extends BaseBuilder {
         }
 
         private ParameterMapping buildParameterMapping(String content) {
-            // 先解析参数映射,就是转化成一个 HashMap | #{favouriteSection,jdbcType=VARCHAR}
             Map<String, String> propertiesMap = new ParameterExpression(content);
             String property = propertiesMap.get("property");
-            Class<?> propertyType = parameterType;
+            Class<?> propertyType;
+            if (typeHandlerRegistry.hasTypeHandler(parameterType)) {
+                propertyType = parameterType;
+            } else if (property != null) {
+                MetaClass metaClass = MetaClass.forClass(parameterType);
+                if (metaClass.hasGetter(property)) {
+                    propertyType = metaClass.getGetterType(property);
+                } else {
+                    propertyType = Object.class;
+                }
+            }else {
+                propertyType = Object.class;
+            }
             ParameterMapping.Builder builder = new ParameterMapping.Builder(configuration, property, propertyType);
             return builder.build();
         }

@@ -72,9 +72,9 @@ public class ProxyTest {
         // 2. 获取映射器对象
         IUserDao userDao = sqlSession.getMapper(IUserDao.class);
         // 3. 测试验证
-        User user = userDao.queryUserName(1L);
-        System.out.println("测试结果：" + JSON.toJSONString(user));
+        User user = new User();
+        user.setId(1L);
+        String name = userDao.queryByUser(user);
+        System.out.println("测试结果：" + name);
     }
-
-
 }

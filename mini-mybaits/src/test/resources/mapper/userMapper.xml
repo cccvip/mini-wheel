@@ -8,4 +8,8 @@
         where id = #{id}
     </select>
 
+    <select id="queryByUser" parameterType="org.mini.mybaits.po.User" resultType="java.lang.String">
+        SELECT name FROM student where id = #{id}
+    </select>
+
 </mapper>

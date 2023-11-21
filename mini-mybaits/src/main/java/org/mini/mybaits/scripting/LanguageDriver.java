@@ -6,6 +6,9 @@ package org.mini.mybaits.scripting;
 
 
 import org.dom4j.Element;
+import org.mini.mybaits.executor.paramter.ParameterHandler;
+import org.mini.mybaits.mapping.BoundSql;
+import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.mapping.SqlSource;
 import org.mini.mybaits.session.Configuration;
 
@@ -16,6 +19,8 @@ import org.mini.mybaits.session.Configuration;
  */
 public interface LanguageDriver {
 
+
     SqlSource createSqlSource(Configuration configuration, Element script, Class<?> parameterType);
 
+    ParameterHandler createParameterHandler(MappingStatement mappedStatement, Object parameterObject, BoundSql boundSql);
 }

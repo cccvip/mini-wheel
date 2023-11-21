@@ -14,4 +14,6 @@ import org.mini.mybaits.po.User;
  */
 public interface IUserDao {
     User queryUserName(long id);
+
+    String queryByUser(User user);
 }

@@ -2,20 +2,19 @@
  * All Rights Reserved.
  *
  */
-package org.mini.mybaits.alias;
+package org.mini.mybaits.type;
 
+
+import org.mini.mybaits.alias.JdbcType;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * TypeHandler.
- * 
- * @author Carl, 2023-11-06 16:17
+ * 类型解析器
+ * @author Carl, 2023-11-21 14:04
  */
 public interface TypeHandler<T> {
-    /**
-     * 设置参数
-     */
     void setParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException;
 }

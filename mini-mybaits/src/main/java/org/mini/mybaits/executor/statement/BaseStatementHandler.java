@@ -6,6 +6,7 @@ package org.mini.mybaits.executor.statement;
 
 
 import org.mini.mybaits.executor.Executor;
+import org.mini.mybaits.executor.paramter.ParameterHandler;
 import org.mini.mybaits.executor.result.ResultSetHandler;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
@@ -34,6 +35,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
     protected final ResultSetHandler resultSetHandler;
 
+    protected final ParameterHandler parameterHandler;
+
     public BaseStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql) {
         this.configuration = mappingStatement.getConfiguration();
         this.executor = executor;
@@ -41,7 +44,10 @@ public abstract class BaseStatementHandler implements StatementHandler {
         this.boundSql = boundSql;
 
         this.parameterObject = parameterObject;
+        //结果数据
         this.resultSetHandler = configuration.newResultSetHandler(executor, mappingStatement, boundSql);
+        //参数数据
+        this.parameterHandler = configuration.newParameterHandler(mappingStatement, parameterObject, boundSql);
     }
 
     /**

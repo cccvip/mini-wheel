@@ -16,5 +16,5 @@ public interface SqlSession {
 
     Configuration configuration();
 
-    <T> T selectOne(String name, Object[] args);
+    <T> T selectOne(String name, Object param);
 }

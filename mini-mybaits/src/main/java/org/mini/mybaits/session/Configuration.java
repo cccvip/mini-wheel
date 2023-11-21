@@ -12,6 +12,7 @@ import org.mini.mybaits.datasource.pooled.PooledDataSourceFactory;
 import org.mini.mybaits.datasource.unpooled.UnpoolDataSourceFactory;
 import org.mini.mybaits.executor.Executor;
 import org.mini.mybaits.executor.SimpleExecutor;
+import org.mini.mybaits.executor.paramter.ParameterHandler;
 import org.mini.mybaits.executor.result.DefaultResultSetHandler;
 import org.mini.mybaits.executor.result.ResultSetHandler;
 import org.mini.mybaits.executor.statement.PrePareStatementHandler;
@@ -25,6 +26,7 @@ import org.mini.mybaits.reflection.factory.ObjectFactory;
 import org.mini.mybaits.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.mini.mybaits.reflection.wrapper.ObjectWrapperFactory;
 import org.mini.mybaits.registry.MapperRegistry;
+import org.mini.mybaits.scripting.LanguageDriver;
 import org.mini.mybaits.scripting.LanguageDriverRegistry;
 import org.mini.mybaits.scripting.xmltags.XmlLanguageDriver;
 import org.mini.mybaits.transaction.Transaction;
@@ -162,4 +164,14 @@ public class Configuration {
     public LanguageDriverRegistry getLanguageRegistry() {
         return languageRegistry;
     }
+
+    public ParameterHandler newParameterHandler(MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql) {
+        ParameterHandler parameterHandler = mappingStatement.getLang().createParameterHandler(mappingStatement, parameterObject, boundSql);
+        return parameterHandler;
+    }
+
+    public LanguageDriver getDefaultScriptingLanguageInstance() {
+        return languageRegistry.getDefaultDriver();
+    }
+
 }
