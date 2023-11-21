@@ -25,12 +25,16 @@ import org.mini.mybaits.reflection.factory.ObjectFactory;
 import org.mini.mybaits.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.mini.mybaits.reflection.wrapper.ObjectWrapperFactory;
 import org.mini.mybaits.registry.MapperRegistry;
+import org.mini.mybaits.scripting.LanguageDriverRegistry;
+import org.mini.mybaits.scripting.xmltags.XmlLanguageDriver;
 import org.mini.mybaits.transaction.Transaction;
 import org.mini.mybaits.transaction.jdbc.JdbcTransactionFactory;
 import sun.plugin2.main.server.ResultHandler;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Configuration.
@@ -52,17 +56,26 @@ public class Configuration {
 
     // 类型处理器注册机
     protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+    //语言注册机
+    protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
+
+    protected final Set<String> loadedResources = new HashSet<>();
 
     // 对象工厂和对象包装器工厂
     protected ObjectFactory objectFactory = new DefaultObjectFactory();
 
     protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
+
+    protected String databaseId;
+
     //数据源
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("DRUID", DruidDataSourceFactory.class);
         typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
         typeAliasRegistry.registerAlias("UNPOOLED", UnpoolDataSourceFactory.class);
+
+        languageRegistry.setDefaultDriverClass(XmlLanguageDriver.class);
     }
 
     public void addMappedStatement(MappingStatement mappedStatement) {
@@ -104,7 +117,7 @@ public class Configuration {
      * 创建结果Handler
      */
     public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql) {
-        return new DefaultResultSetHandler(boundSql);
+        return new DefaultResultSetHandler(boundSql, mappingStatement);
     }
 
     /**
@@ -128,5 +141,25 @@ public class Configuration {
 
     public TypeHandlerRegistry getTypeHandlerRegistry() {
         return typeHandlerRegistry;
+    }
+
+    public boolean isResourceLoaded(String resource) {
+        return loadedResources.contains(resource);
+    }
+
+    public void addLoadedResource(String resource) {
+        loadedResources.add(resource);
+    }
+
+    public String getDatabaseId() {
+        return databaseId;
+    }
+
+    public void setDatabaseId(String databaseId) {
+        this.databaseId = databaseId;
+    }
+
+    public LanguageDriverRegistry getLanguageRegistry() {
+        return languageRegistry;
     }
 }

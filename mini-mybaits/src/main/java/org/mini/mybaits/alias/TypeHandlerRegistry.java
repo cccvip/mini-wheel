@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -14,7 +13,6 @@ import java.util.Map;
 /**
  * TypeHandlerRegistry.
  * 
- * @version CrisisGo v1.0
  * @author Carl, 2023-11-06 16:17
  */
 public class TypeHandlerRegistry {

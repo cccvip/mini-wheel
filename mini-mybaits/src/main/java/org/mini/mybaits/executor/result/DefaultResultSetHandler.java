@@ -6,6 +6,7 @@ package org.mini.mybaits.executor.result;
 
 
 import org.mini.mybaits.mapping.BoundSql;
+import org.mini.mybaits.mapping.MappingStatement;
 
 import java.lang.reflect.Method;
 import java.sql.Date;
@@ -23,18 +24,19 @@ import java.util.List;
  * @author Carl, 2023-10-31 14:01
  */
 public class DefaultResultSetHandler implements ResultSetHandler {
+    private final BoundSql boundSql;
+    private final MappingStatement mappingStatement;
 
-    final BoundSql boundSql;
-
-    public DefaultResultSetHandler(BoundSql boundSql) {
+    public DefaultResultSetHandler(BoundSql boundSql,MappingStatement mappedStatement) {
         this.boundSql = boundSql;
+        this.mappingStatement = mappedStatement;
     }
 
     @Override
     public <E> List<E> handleResultSets(Statement stmt) throws SQLException {
-        String resultType = boundSql.getResultType();
+        ResultSet resultSet = stmt.getResultSet();
         try {
-            return resultSet2Obj(stmt.getResultSet(), Class.forName(resultType));
+            return resultSet2Obj(resultSet, mappingStatement.getResultType());
         } catch (Exception e) {
             throw new RuntimeException("query result is error");
         }

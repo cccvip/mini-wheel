@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -12,7 +11,6 @@ import org.mini.mybaits.session.Configuration;
 /**
  * ParameterMapping.
  * 参数类型映射
- * @version CrisisGo v1.0
  * @author Carl, 2023-11-06 15:59
  */
 public class ParameterMapping {

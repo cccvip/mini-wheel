@@ -53,7 +53,7 @@ public class DefaultSqlSession implements SqlSession {
 
         MappingStatement ms = configuration.getMappedStatement(id);
 
-        List<T> list = executor.query(ms, parameter, null, ms.getBoundSql());
+        List<T> list = executor.query(ms, parameter, null, ms.getSqlSource().getBoundSql(parameter));
 
         return list.get(0);
     }

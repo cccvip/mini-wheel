@@ -5,7 +5,7 @@
 package org.mini.mybaits.session;
 
 
-import org.mini.mybaits.builder.xml.XmlSqlSessionBuilder;
+import org.mini.mybaits.builder.xml.XMLConfigBuilder;
 import org.mini.mybaits.session.defaults.DefaultSqlSessionFactory;
 
 import java.io.Reader;
@@ -19,7 +19,7 @@ import java.io.Reader;
 public class SqlSessionFactoryBuilder {
 
     public SqlSessionFactory build(Reader reader) {
-        XmlSqlSessionBuilder xmlSqlSessionBuilder = new XmlSqlSessionBuilder(reader);
+        XMLConfigBuilder xmlSqlSessionBuilder = new XMLConfigBuilder(reader);
         return build(xmlSqlSessionBuilder.parse());
     }
 

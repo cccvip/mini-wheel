@@ -1,19 +1,14 @@
-/*
- * Copyright @2023 CrisisGo Inc.
- * All Rights Reserved.
- *
- */
 package org.mini.mybaits.scripting.xmltags;
 
-
 /**
- * SqlNode.
- *
- * @author Carl, 2023-11-06 16:13
- * @version CrisisGo v1.0
+ * @author 小傅哥，微信：fustack
+ * @description SQL 节点
+ * @date 2022/5/17
+ * @github https://github.com/fuzhengwei/CodeDesignTutorials
+ * @Copyright 公众号：bugstack虫洞栈 | 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
  */
 public interface SqlNode {
 
-    void apply(DynamicContext context);
+    boolean apply(DynamicContext context);
 
 }

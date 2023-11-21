@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -13,7 +12,6 @@ import org.mini.mybaits.session.Configuration;
 /**
  * BaseBuilder.
  * 
- * @version CrisisGo v1.0
  * @author Carl, 2023-11-06 16:15
  */
 public abstract class BaseBuilder {

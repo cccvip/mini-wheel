@@ -4,6 +4,8 @@
  */
 package org.mini.mybaits.alias;
 
+import org.mini.mybaits.io.Resources;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -11,9 +13,11 @@ import java.util.Map;
 /**
  * TypeAliasRegistry.
  * 类型别名注册,主要用途是解析XML
+ *
  * @author Carl, 2023-09-14 13:45
  */
 public class TypeAliasRegistry {
+
     private final Map<String, Class<?>> TYPE_ALIASES = new HashMap<>();
 
     public TypeAliasRegistry() {
@@ -33,10 +37,23 @@ public class TypeAliasRegistry {
         TYPE_ALIASES.put(key, value);
     }
 
+    //如果当前别名不存在当前空间下,则生成Class加载到内存中
     public <T> Class<T> resolveAlias(String string) {
-        String key = string.toLowerCase(Locale.ENGLISH);
-        return (Class<T>) TYPE_ALIASES.get(key);
+        try {
+            if (string == null) {
+                return null;
+            }
+            String key = string.toLowerCase(Locale.ENGLISH);
+            Class<T> value;
+            if (TYPE_ALIASES.containsKey(key)) {
+                value = (Class<T>) TYPE_ALIASES.get(key);
+            } else {
+                value = (Class<T>) Resources.classForName(string);
+            }
+            return value;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Could not resolve type alias '" + string + "'.  Cause: " + e, e);
+        }
     }
-
 
 }

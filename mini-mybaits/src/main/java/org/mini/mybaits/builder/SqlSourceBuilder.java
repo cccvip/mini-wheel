@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -23,7 +22,6 @@ import java.util.Map;
  * SqlSourceBuilder.
  *
  * @author Carl, 2023-11-06 16:15
- * @version CrisisGo v1.0
  */
 public class SqlSourceBuilder extends BaseBuilder {
 

@@ -18,9 +18,9 @@ public class MappingStatement {
     private String id;
     //SQL操作类型
     private SqlCommandType sqlCommandType;
-    //绑定SQL
-    private BoundSql boundSql;
     private Configuration configuration;
+    private SqlSource sqlSource;
+    Class<?> resultType;
 
     MappingStatement() {
 
@@ -28,20 +28,18 @@ public class MappingStatement {
 
     //使用构造器模式,初始化实体类
     public static class Builder {
-
         private MappingStatement mappingStatement = new MappingStatement();
 
-        public Builder(Configuration configuration, String id, SqlCommandType sqlCommandType, BoundSql boundSql) {
+        public Builder(Configuration configuration, String id, SqlCommandType sqlCommandType, SqlSource sqlSource, Class<?> resultType) {
             mappingStatement.configuration = configuration;
             mappingStatement.id = id;
             mappingStatement.sqlCommandType = sqlCommandType;
-            mappingStatement.boundSql = boundSql;
+            mappingStatement.sqlSource = sqlSource;
+            mappingStatement.resultType = resultType;
         }
-
         public MappingStatement build() {
             return mappingStatement;
         }
-
     }
 
     public String getId() {
@@ -60,12 +58,20 @@ public class MappingStatement {
         this.sqlCommandType = sqlCommandType;
     }
 
-    public BoundSql getBoundSql() {
-        return boundSql;
+    public SqlSource getSqlSource() {
+        return sqlSource;
     }
 
-    public void setBoundSql(BoundSql boundSql) {
-        this.boundSql = boundSql;
+    public void setSqlSource(SqlSource sqlSource) {
+        this.sqlSource = sqlSource;
+    }
+
+    public Class<?> getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(Class<?> resultType) {
+        this.resultType = resultType;
     }
 
     public Configuration getConfiguration() {

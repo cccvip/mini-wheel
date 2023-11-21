@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -9,7 +8,6 @@ package org.mini.mybaits.parsing;
 /**
  * GenericTokenParser.
  * 
- * @version CrisisGo v1.0
  * @author Carl, 2023-11-20 14:25
  */
 public class GenericTokenParser {

@@ -2,7 +2,7 @@
  * All Rights Reserved.
  *
  */
-package org.mini.mybaits.mapping.sql;
+package org.mini.mybaits.scripting.defaults;
 
 
 import org.mini.mybaits.builder.SqlSourceBuilder;
@@ -15,19 +15,18 @@ import org.mini.mybaits.session.Configuration;
 import java.util.HashMap;
 
 /**
- * DynamicSqlSource.
+ * RawSqlSource.
  * 
- * @author Carl, 2023-11-06 16:12
+ * @author Carl, 2023-11-21 11:28
  */
-public class DynamicSqlSource implements SqlSource {
-
+public class RawSqlSource implements SqlSource {
     private final SqlSource sqlSource;
 
-    public DynamicSqlSource(Configuration configuration, SqlNode rootSqlNode, Class<?> parameterType) {
+    public RawSqlSource(Configuration configuration, SqlNode rootSqlNode, Class<?> parameterType) {
         this(configuration, getSql(configuration, rootSqlNode), parameterType);
     }
 
-    public DynamicSqlSource(Configuration configuration, String sql, Class<?> parameterType) {
+    public RawSqlSource(Configuration configuration, String sql, Class<?> parameterType) {
         SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
         Class<?> clazz = parameterType == null ? Object.class : parameterType;
         sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<>());
@@ -35,7 +34,7 @@ public class DynamicSqlSource implements SqlSource {
 
     @Override
     public BoundSql getBoundSql(Object parameterObject) {
-        return null;
+        return sqlSource.getBoundSql(parameterObject);
     }
 
     private static String getSql(Configuration configuration, SqlNode rootSqlNode) {
@@ -43,5 +42,6 @@ public class DynamicSqlSource implements SqlSource {
         rootSqlNode.apply(context);
         return context.getSql();
     }
+
 
 }

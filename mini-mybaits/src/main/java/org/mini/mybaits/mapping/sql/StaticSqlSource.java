@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -16,7 +15,6 @@ import java.util.List;
 /**
  * StaticSqlSource.
  * 静态SQL
- * @version CrisisGo v1.0
  * @author Carl, 2023-11-06 15:56
  */
 public class StaticSqlSource implements SqlSource {

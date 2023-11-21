@@ -1,5 +1,4 @@
 /*
- * Copyright @2023 CrisisGo Inc.
  * All Rights Reserved.
  *
  */
@@ -12,7 +11,6 @@ import java.util.HashMap;
  * ParameterExpression.
  *
  * @author Carl, 2023-11-20 14:15
- * @version CrisisGo v1.0
  */
 public class ParameterExpression extends HashMap<String, String> {
 

@@ -32,7 +32,43 @@ public class BoundSql {
         this.metaParameters = configuration.newMetaObject(additionalParameters);
     }
 
+    public String getSql() {
+        return sql;
+    }
 
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
 
+    public List<ParameterMapping> getParameterMappings() {
+        return parameterMappings;
+    }
 
+    public void setParameterMappings(List<ParameterMapping> parameterMappings) {
+        this.parameterMappings = parameterMappings;
+    }
+
+    public Object getParameterObject() {
+        return parameterObject;
+    }
+
+    public void setParameterObject(Object parameterObject) {
+        this.parameterObject = parameterObject;
+    }
+
+    public Map<String, Object> getAdditionalParameters() {
+        return additionalParameters;
+    }
+
+    public void setAdditionalParameters(Map<String, Object> additionalParameters) {
+        this.additionalParameters = additionalParameters;
+    }
+
+    public MetaObject getMetaParameters() {
+        return metaParameters;
+    }
+
+    public void setMetaParameters(MetaObject metaParameters) {
+        this.metaParameters = metaParameters;
+    }
 }
