@@ -11,7 +11,7 @@ import org.mini.mybaits.executor.result.ResultSetHandler;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.session.Configuration;
-import org.mini.mybaits.session.ResultHandler;
+import org.mini.mybaits.session.ResultSessionHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -38,7 +38,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
     protected final ParameterHandler parameterHandler;
 
-    public BaseStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql, ResultHandler resultHandler) {
+    public BaseStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql, ResultSessionHandler resultSessionHandler) {
         this.configuration = mappingStatement.getConfiguration();
         this.executor = executor;
         this.mappingStatement = mappingStatement;
@@ -46,7 +46,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
         this.parameterObject = parameterObject;
         //结果数据
-        this.resultSetHandler = configuration.newResultSetHandler(executor, mappingStatement, boundSql, resultHandler);
+        this.resultSetHandler = configuration.newResultSetHandler(executor, mappingStatement, boundSql, resultSessionHandler);
         //参数数据
         this.parameterHandler = configuration.newParameterHandler(mappingStatement, parameterObject, boundSql);
     }

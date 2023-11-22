@@ -8,6 +8,7 @@ package org.mini.mybaits.executor.statement;
 import org.mini.mybaits.executor.Executor;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
+import org.mini.mybaits.session.ResultSessionHandler;
 import sun.plugin2.main.server.ResultHandler;
 
 import java.sql.Connection;
@@ -23,8 +24,8 @@ import java.util.List;
  */
 public class PrePareStatementHandler extends BaseStatementHandler {
 
-    public PrePareStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql, org.mini.mybaits.session.ResultHandler resultHandler) {
-        super(executor, mappingStatement, parameterObject, boundSql, resultHandler);
+    public PrePareStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql, ResultSessionHandler resultSessionHandler) {
+        super(executor, mappingStatement, parameterObject, boundSql, resultSessionHandler);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class PrePareStatementHandler extends BaseStatementHandler {
     }
 
     @Override
-    public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
+    public <E> List<E> query(Statement statement, ResultSessionHandler resultHandler) throws SQLException {
         PreparedStatement ps = (PreparedStatement) statement;
         ps.execute();
         return resultSetHandler.handleResultSets(ps);

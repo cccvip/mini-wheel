@@ -9,6 +9,7 @@ import org.mini.mybaits.executor.statement.StatementHandler;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.session.Configuration;
+import org.mini.mybaits.session.ResultSessionHandler;
 import org.mini.mybaits.transaction.Transaction;
 import sun.plugin2.main.server.ResultHandler;
 
@@ -29,10 +30,10 @@ public class SimpleExecutor extends BaseExecutor {
     }
 
     @Override
-    protected <E> List<E> doQuery(MappingStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    protected <E> List<E> doQuery(MappingStatement ms, Object parameter, ResultSessionHandler resultHandler, BoundSql boundSql) {
         try {
             Configuration configuration = ms.getConfiguration();
-            StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, boundSql);
+            StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, boundSql,resultHandler);
             Connection connection = transaction.getConnection();
             Statement stmt = handler.prepare(connection);
             handler.parameterize(stmt);

@@ -5,7 +5,7 @@
 package org.mini.mybaits.executor.statement;
 
 
-import sun.plugin2.main.server.ResultHandler;
+import org.mini.mybaits.session.ResultSessionHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,5 +25,5 @@ public interface StatementHandler {
     void parameterize(Statement statement) throws SQLException;
 
     /** 执行查询 */
-    <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException;
+    <E> List<E> query(Statement statement, ResultSessionHandler resultHandler) throws SQLException;
 }

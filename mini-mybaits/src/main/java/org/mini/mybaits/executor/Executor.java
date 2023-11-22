@@ -7,6 +7,7 @@ package org.mini.mybaits.executor;
 
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
+import org.mini.mybaits.session.ResultSessionHandler;
 import sun.plugin2.main.server.ResultHandler;
 
 import java.util.List;
@@ -19,6 +20,6 @@ import java.util.List;
  */
 public interface Executor {
 
-    <E> List<E> query(MappingStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    <E> List<E> query(MappingStatement ms, Object parameter, ResultSessionHandler resultHandler, BoundSql boundSql);
 
 }

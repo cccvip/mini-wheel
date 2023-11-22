@@ -74,7 +74,7 @@ public class ProxyTest {
         // 3. 测试验证
         User user = new User();
         user.setId(1L);
-        String name = userDao.queryByUser(user);
-        System.out.println("测试结果：" + name);
+        User name = userDao.queryUserName(1L);
+        System.out.println("测试结果：" + JSON.toJSONString(name));
     }
 }

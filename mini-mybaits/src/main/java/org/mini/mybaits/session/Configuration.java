@@ -117,16 +117,16 @@ public class Configuration {
      * newResultSetHandler.
      * 创建结果Handler
      */
-    public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql, ResultHandler resultHandler) {
-        return new DefaultResultSetHandler(boundSql, mappingStatement, resultHandler);
+    public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql, ResultSessionHandler resultSessionHandler) {
+        return new DefaultResultSetHandler(boundSql, mappingStatement, resultSessionHandler);
     }
 
     /**
      * 创建语句处理器
      */
     public StatementHandler newStatementHandler(Executor executor, MappingStatement mappedStatement, Object parameter,
-                                                BoundSql boundSql) {
-        return new PrePareStatementHandler(executor, mappedStatement, parameter, boundSql);
+                                                BoundSql boundSql, ResultSessionHandler resultSessionHandler) {
+        return new PrePareStatementHandler(executor, mappedStatement, parameter, boundSql, resultSessionHandler);
     }
 
     /**

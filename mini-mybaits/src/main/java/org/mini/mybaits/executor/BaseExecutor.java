@@ -8,8 +8,8 @@ package org.mini.mybaits.executor;
 import org.mini.mybaits.mapping.BoundSql;
 import org.mini.mybaits.mapping.MappingStatement;
 import org.mini.mybaits.session.Configuration;
+import org.mini.mybaits.session.ResultSessionHandler;
 import org.mini.mybaits.transaction.Transaction;
-import sun.plugin2.main.server.ResultHandler;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ public abstract class BaseExecutor implements Executor {
     }
 
     @Override
-    public <E> List<E> query(MappingStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    public <E> List<E> query(MappingStatement ms, Object parameter, ResultSessionHandler resultHandler, BoundSql boundSql) {
         return doQuery(ms, parameter, resultHandler, boundSql);
     }
 
-    protected abstract <E> List<E> doQuery(MappingStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    protected abstract <E> List<E> doQuery(MappingStatement ms, Object parameter, ResultSessionHandler resultHandler, BoundSql boundSql);
 
 }

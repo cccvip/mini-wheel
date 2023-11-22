@@ -14,9 +14,9 @@ import org.mini.mybaits.reflection.MetaClass;
 import org.mini.mybaits.reflection.MetaObject;
 import org.mini.mybaits.reflection.factory.ObjectFactory;
 import org.mini.mybaits.session.Configuration;
-import org.mini.mybaits.session.ResultHandler;
+import org.mini.mybaits.session.ResultSessionHandler;
 import org.mini.mybaits.session.defaults.DefaultResultContext;
-import org.mini.mybaits.session.defaults.DefaultResultHandler;
+import org.mini.mybaits.session.defaults.DefaultResultSessionHandler;
 import org.mini.mybaits.type.TypeHandler;
 
 import java.sql.SQLException;
@@ -33,35 +33,33 @@ import java.util.Locale;
 public class DefaultResultSetHandler implements ResultSetHandler {
     private final BoundSql boundSql;
     private final MappingStatement mappingStatement;
-    private final ResultHandler resultHandler;
+    private final ResultSessionHandler resultSessionHandler;
     private final Configuration configuration;
     private final ObjectFactory objectFactory;
     private final TypeHandlerRegistry typeHandlerRegistry;
 
-    public DefaultResultSetHandler(BoundSql boundSql, MappingStatement mappedStatement, ResultHandler resultHandler) {
+    public DefaultResultSetHandler(BoundSql boundSql, MappingStatement mappedStatement, ResultSessionHandler resultSessionHandler) {
         this.configuration = mappedStatement.getConfiguration();
         this.boundSql = boundSql;
         this.mappingStatement = mappedStatement;
-        this.resultHandler = resultHandler;
+        this.resultSessionHandler = resultSessionHandler;
         this.objectFactory = configuration.getObjectFactory();
         this.typeHandlerRegistry = configuration.getTypeHandlerRegistry();
     }
 
     @Override
-    public <E> List<E> handleResultSets(Statement stmt) throws SQLException {
+    public List<Object> handleResultSets(Statement stmt) throws SQLException {
         List<Object> multipleResults = new ArrayList<>();
         ResultSetWrapper rsw = new ResultSetWrapper(stmt.getResultSet(), mappingStatement.getConfiguration());
         int resultSetCount = 0;
         List<ResultMap> resultMaps = mappingStatement.getResultMaps();
         while (rsw != null && resultMaps.size() > resultSetCount) {
             ResultMap resultMap = resultMaps.get(resultSetCount);
-
             handleResultSet(rsw, resultMap, multipleResults, null);
             rsw = getNextResultSet(stmt);
             resultSetCount++;
         }
-
-        return null;
+        return multipleResults.size() == 1 ? (List<Object>) multipleResults.get(0) : multipleResults;
     }
 
     private ResultSetWrapper getNextResultSet(Statement stmt) {
@@ -69,9 +67,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Object> multipleResults, ResultMapping parentMapping) throws SQLException {
-        if (resultHandler == null) {
+        if (resultSessionHandler == null) {
             // 1. 新创建结果处理器
-            DefaultResultHandler defaultResultHandler = new DefaultResultHandler(objectFactory);
+            DefaultResultSessionHandler defaultResultHandler = new DefaultResultSessionHandler(objectFactory);
             // 2. 封装数据
             handleRowValuesForSimpleResultMap(rsw, resultMap, defaultResultHandler, null);
             // 3. 保存结果
@@ -79,17 +77,17 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
     }
 
-    private void handleRowValuesForSimpleResultMap(ResultSetWrapper rsw, ResultMap resultMap, ResultHandler resultHandler, ResultMapping parentMapping) throws SQLException {
+    private void handleRowValuesForSimpleResultMap(ResultSetWrapper rsw, ResultMap resultMap, ResultSessionHandler resultSessionHandler, ResultMapping parentMapping) throws SQLException {
         DefaultResultContext resultContext = new DefaultResultContext();
         while (rsw.getResultSet().next()) {
             Object rowValue = getRowValue(rsw, resultMap);
-            callResultHandler(resultHandler, resultContext, rowValue);
+            callResultHandler(resultSessionHandler, resultContext, rowValue);
         }
     }
 
-    private void callResultHandler(ResultHandler resultHandler, DefaultResultContext resultContext, Object rowValue) {
+    private void callResultHandler(ResultSessionHandler resultSessionHandler, DefaultResultContext resultContext, Object rowValue) {
         resultContext.nextResultObject(rowValue);
-        resultHandler.handleResult(resultContext);
+        resultSessionHandler.handleResult(resultContext);
     }
 
     /**
