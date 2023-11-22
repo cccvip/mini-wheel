@@ -8,6 +8,7 @@ package org.mini.mybaits.type;
 import org.mini.mybaits.alias.JdbcType;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -19,5 +20,10 @@ public class StringTypeHandler extends BaseTypeHandler<String> {
     @Override
     protected void setGenericParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
         ps.setString(i, parameter);
+    }
+
+    @Override
+    protected String getGenericResult(ResultSet rs, String columnName) throws SQLException {
+        return rs.getString(columnName);
     }
 }

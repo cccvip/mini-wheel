@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class PrePareStatementHandler extends BaseStatementHandler {
 
-    public PrePareStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql) {
-        super(executor, mappingStatement, parameterObject, boundSql);
+    public PrePareStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql, org.mini.mybaits.session.ResultHandler resultHandler) {
+        super(executor, mappingStatement, parameterObject, boundSql, resultHandler);
     }
 
     @Override

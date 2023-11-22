@@ -8,6 +8,8 @@ package org.mini.mybaits.mapping;
 import org.mini.mybaits.scripting.LanguageDriver;
 import org.mini.mybaits.session.Configuration;
 
+import java.util.List;
+
 /**
  * MappingStatement.
  *
@@ -23,6 +25,7 @@ public class MappingStatement {
     private SqlSource sqlSource;
     Class<?> resultType;
     private LanguageDriver lang;
+    private List<ResultMap> resultMaps;
 
     MappingStatement() {}
 
@@ -41,6 +44,16 @@ public class MappingStatement {
         public MappingStatement build() {
             return mappingStatement;
         }
+
+        public String id(){
+            return mappingStatement.id;
+        }
+
+        public Builder resultMaps(List<ResultMap> resultMaps) {
+            mappingStatement.resultMaps = resultMaps;
+            return this;
+        }
+
     }
 
     public String getId() {
@@ -89,5 +102,14 @@ public class MappingStatement {
 
     public void setLang(LanguageDriver lang) {
         this.lang = lang;
+    }
+
+
+    public List<ResultMap> getResultMaps() {
+        return resultMaps;
+    }
+
+    public void setResultMaps(List<ResultMap> resultMaps) {
+        this.resultMaps = resultMaps;
     }
 }

@@ -31,7 +31,6 @@ import org.mini.mybaits.scripting.LanguageDriverRegistry;
 import org.mini.mybaits.scripting.xmltags.XmlLanguageDriver;
 import org.mini.mybaits.transaction.Transaction;
 import org.mini.mybaits.transaction.jdbc.JdbcTransactionFactory;
-import sun.plugin2.main.server.ResultHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,8 +117,8 @@ public class Configuration {
      * newResultSetHandler.
      * 创建结果Handler
      */
-    public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql) {
-        return new DefaultResultSetHandler(boundSql, mappingStatement);
+    public ResultSetHandler newResultSetHandler(Executor executor, MappingStatement mappingStatement, BoundSql boundSql, ResultHandler resultHandler) {
+        return new DefaultResultSetHandler(boundSql, mappingStatement, resultHandler);
     }
 
     /**
@@ -174,4 +173,7 @@ public class Configuration {
         return languageRegistry.getDefaultDriver();
     }
 
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
+    }
 }

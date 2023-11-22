@@ -18,12 +18,14 @@ import java.util.List;
 /**
  * SimpleStatementHandler.
  * 简单Statement过滤器
+ *
  * @author Carl, 2023-10-31 14:25
  */
 public class SimpleStatementHandler extends BaseStatementHandler {
 
-    public SimpleStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject, BoundSql boundSql) {
-        super(executor, mappingStatement, parameterObject, boundSql);
+    public SimpleStatementHandler(Executor executor, MappingStatement mappingStatement, Object parameterObject,
+                                  BoundSql boundSql, org.mini.mybaits.session.ResultHandler resultHandler) {
+        super(executor, mappingStatement, parameterObject, boundSql, resultHandler);
     }
 
     @Override
