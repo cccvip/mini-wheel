@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+<h1>WebSocket Test</h1>
+<div id="messages"></div>
+
+<script>
+    var socket = new WebSocket("ws://localhost:8080/websocket");
+
+    socket.binaryType = "arraybuffer"; // 设置数据格式为二进制数组
+
+    socket.onopen = function(event) {
+        console.log('WebSocket连接已建立');
+        // 发送Ping帧
+        sendPingFrame(socket);
+    };
+
+    socket.onmessage = function(event) {
+        console.log('接收到消息: ' + event.data);
+        // 在这里可以处理收到的Pong帧或其他消息
+    };
+
+    socket.onclose = function(event) {
+        console.log('WebSocket连接已关闭');
+    };
+
+    socket.onerror = function(error) {
+        console.error('WebSocket发生错误: ' + error);
+    };
+
+    function sendPingFrame(socket) {
+        var pingFrame = new Uint8Array(1);
+        pingFrame[0] = 0x9; // 设置帧的操作码为Ping帧
+        socket.send(pingFrame);
+    }
+</script>
+</body>
+</html>
