@@ -24,7 +24,7 @@ public abstract class Heap<T> implements IHeap<T> {
 
     private Object[] element;
 
-    private Integer index;
+    private Integer index = 0;
 
     public Heap() {
         this.element = new Object[initSize];
@@ -38,17 +38,19 @@ public abstract class Heap<T> implements IHeap<T> {
     @Override
     public Boolean add(T t) {
         //如果size不够,需要进行扩容处理
-        if (index + 1 >= element.length) {
-            grow(index + 1);
+        if (t == null) {
+            throw new NullPointerException();
         }
-        int i = index + 1;
+        int i = index;
+        if (i >= element.length) {
+            grow(i + 1);
+        }
+        index = i + 1;
         if (i == 0) {
             element[0] = t;
         } else {
             siftUp(i, t);
         }
-        element[index] = t;
-        index++;
         return true;
     }
 
@@ -97,7 +99,7 @@ public abstract class Heap<T> implements IHeap<T> {
     //移除元素
     @Override
     public T poll() {
-        if (index == 0){
+        if (index == 0) {
             return null;
         }
         int s = --index;

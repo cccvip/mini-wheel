@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="debug" monitorInterval="30">
+    <!--用来自定义一些变量-->
+    <Properties>
+        <!--变量定义-->
+        <Property name="myPattern" value="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Properties>
+    <!--使用Appenders元素可以将日志事件数据写到各种目标位置-->
+    <Appenders>
+        <!-- 默认打印到控制台 -->
+        <Console name="ConsoleAppend" target="SYSTEM_OUT">
+            <!-- 默认打印格式 -->
+            <PatternLayout pattern="${myPattern}"/>
+        </Console>
+    </Appenders>
+    <!--定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <Loggers>
+        <!-- 默认打印日志级别为 error -->
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppend"/>
+        </Root>
+    </Loggers>
+</Configuration>
