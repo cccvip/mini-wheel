@@ -5,6 +5,9 @@
 package tree;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * AbstractTree.
  *
@@ -12,10 +15,23 @@ package tree;
  */
 public abstract class AbstractTree {
 
+    public List<Integer> elementList = new ArrayList<>();
+
     public Node root;
 
     public int size;
 
+//    //节点左旋
+//    protected Node rotateLeft(Node node){
+//
+//
+//    }
+//
+//    //节点右旋
+//    protected  Node rotateRight(Node node){
+//
+//
+//    }
     protected String printSubTree(Node node) {
         StringBuilder tree = new StringBuilder();
         if (node.right != null) {
